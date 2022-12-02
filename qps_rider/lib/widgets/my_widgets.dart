@@ -16,3 +16,4 @@ export 'dialog/dialogBox.dart';
 export 'bottomBars/bottombar.dart';
 export 'slider/slider.dart';
 export 'routes/tab_navigator.dart';
+export 'routes/homepage_navigation.dart';

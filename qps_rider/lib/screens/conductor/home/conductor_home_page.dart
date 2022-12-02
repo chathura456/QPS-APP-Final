@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qps_rider/screens/conductor/features/active_bus/active_bus.dart';
 import '../../../widgets/my_widgets.dart';
 import '../../screens.dart';
 
@@ -93,21 +94,29 @@ class _ConductorHomeState extends State<ConductorHome>
                                   iconData: Icons.manage_accounts,
                                   nextScreen: EditProfile()),
                               MyListTiles(
-                                  text: 'Ticket\n Packages',
-                                  iconData: Icons.confirmation_number,
-                                  nextScreen: TicketPackages()),
+                                  text: 'Conductor\n Schedules',
+                                  iconData: Icons.dashboard,
+                                  nextScreen: ConductorDashboard()),
                               MyListTiles(
-                                  text: 'Bus\n Schedules',
-                                  iconData: Icons.event_note,
-                                  nextScreen: BusSchedules()),
+                                  text: 'Active\n Bus',
+                                  iconData: Icons.directions_bus,
+                                  nextScreen: ActiveBus()),
                               MyListTiles(
                                   text: 'Live\n Tracker',
                                   iconData: Icons.place,
                                   nextScreen: LiveTracker()),
                               MyListTiles(
                                   text: 'Ads\n Section',
-                                  iconData: Icons.shop_2,
+                                  iconData: Icons.tab,
                                   nextScreen: AdsSection()),
+                              MyListTiles(
+                                  text: 'Money\n Transfer',
+                                  iconData: Icons.currency_exchange,
+                                  nextScreen: MoneyTransfer()),
+                              MyListTiles(
+                                  text: 'Bank\n Details',
+                                  iconData: Icons.add_card_outlined,
+                                  nextScreen: BankDetails()),
                               MyListTiles(
                                   text: 'Payment\n History',
                                   iconData: Icons.history,
@@ -190,7 +199,6 @@ class _ConductorHomeState extends State<ConductorHome>
                 MaterialPageRoute(builder: (context) => const AboutUs()));
             break;
           case 7:
-            logout(context);
             //Navigator.push(context, MaterialPageRoute(builder: (context) =>  LoginScreen()));
             Navigator.of(context, rootNavigator: true).pushReplacement(
                 MaterialPageRoute(builder: (context) => const LoginScreen()));
@@ -226,12 +234,7 @@ class _ConductorHomeState extends State<ConductorHome>
     );
   }
 
-  Future<void> logout(BuildContext context) async {
-    //await FirebaseAuth.instance.signOut();
-    /*Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context)=> LoginScreen())
-    );*/
-  }
+
 
   @override
   bool get wantKeepAlive => true;

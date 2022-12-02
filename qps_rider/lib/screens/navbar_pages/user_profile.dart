@@ -24,7 +24,7 @@ class _QRScanner extends State<UserProfile> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const TicketPackages()));
+                        builder: (context) => const MoneyTransfer()));
               },
               child: const Text('Nested Page'),
             ),

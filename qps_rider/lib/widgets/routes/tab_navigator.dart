@@ -1,25 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:qps_rider/screens/owner/owner_home.dart';
+import 'package:qps_rider/screens/owner/features/bus_manager/bus_manager.dart';
 import '/screens/screens.dart';
 import '/widgets/my_widgets.dart';
-
-class TabNavigatorRoutes {
-  static const String root = '/';
-}
-
-class CustomRouter {
-  static Route onGenerateNestedRoute(RouteSettings settings) {
-    print('NestedRoute: ${settings.name}');
-    switch (settings.name) {
-      case HomePageSelect.routeName:
-        return MaterialPageRoute(builder: (context) => const HomePageSelect());
-      case UserProfile.routeName:
-        return MaterialPageRoute(builder: (context) => const UserProfile());
-      default:
-        return MaterialPageRoute(builder: (context) => const HomePageSelect());
-    }
-  }
-}
 
 class TabNavigator extends StatelessWidget {
   static const String tabNavigatorRoot = '/';
@@ -42,7 +24,6 @@ class TabNavigator extends StatelessWidget {
               builder: (context) => routeBuilders[initialRoute]!(context)),
         ];
       },
-      onGenerateRoute: CustomRouter.onGenerateNestedRoute,
     );
   }
 
@@ -50,16 +31,30 @@ class TabNavigator extends StatelessWidget {
     return {tabNavigatorRoot: (context) => _getScreen(context, tabItem)};
   }
 
-  Widget _selecthome(BuildContext context){
+  Widget _selectHome(BuildContext context){
     switch(type){
       case 'conductor':
         return const ConductorHome();
       case 'owner':
         return const OwnerHome();
       case 'seller':
-        return const ConductorHome();
+        return const SellerHome();
       default:
         return const ConductorHome();
+    }
+
+  }
+
+  Widget _selectFloating(BuildContext context){
+    switch(type){
+      case 'conductor':
+        return const QRGenerator();
+      case 'owner':
+        return const BusManager();
+      case 'seller':
+        return const CreateAd();
+      default:
+        return const QRGenerator();
     }
 
   }
@@ -67,7 +62,7 @@ class TabNavigator extends StatelessWidget {
   Widget _getScreen(BuildContext context, TabItem item) {
     switch (item) {
       case TabItem.home:
-        return _selecthome(context);
+        return _selectHome(context);
       case TabItem.chat:
         return const Chat1();
       case TabItem.profile:
@@ -75,7 +70,7 @@ class TabNavigator extends StatelessWidget {
       case TabItem.offers:
         return const Offers1();
       case TabItem.center:
-        return const QRGenerator();
+        return _selectFloating(context);
       default:
         return const ConductorHome();
     }

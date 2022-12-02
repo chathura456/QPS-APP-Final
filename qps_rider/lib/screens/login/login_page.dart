@@ -157,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const ConductorHomeNavigator(type: 'owner',),
+                                                    const HomePageNavigator(type: 'seller',),
                                               ));
 
                                           //signIn(emailController.text, passwordController.text, context);

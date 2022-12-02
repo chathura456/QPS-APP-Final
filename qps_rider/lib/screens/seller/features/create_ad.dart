@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 
 import '../../../../widgets/colors.dart';
 
-class BusManager extends StatefulWidget {
-  const BusManager({Key? key}) : super(key: key);
+class CreateAd extends StatefulWidget {
+  const CreateAd({Key? key}) : super(key: key);
 
   @override
-  State<BusManager> createState() => _BusManagerState();
+  State<CreateAd> createState() => _CreateAdState();
 }
 
-class _BusManagerState extends State<BusManager> {
+class _CreateAdState extends State<CreateAd> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bus Manager'),
+        title: const Text('Create Ad'),
         centerTitle: true,
         automaticallyImplyLeading: false,
         backgroundColor: AppColors.kPrimaryColor,

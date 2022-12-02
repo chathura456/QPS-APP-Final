@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:qps_rider/screens/owner/features/bus_manager/bus_manager2.dart';
-import 'package:qps_rider/screens/owner/features/owner_bus_tracking/owner_bus_tracking.dart';
-import 'package:qps_rider/screens/owner/features/owner_dashboard/owner_dashboard.dart';
+import 'package:qps_rider/screens/seller/features/purchase_history.dart';
+import 'package:qps_rider/screens/seller/features/seller_dashboard.dart';
 import '../../../widgets/my_widgets.dart';
 import '../screens.dart';
 
-class OwnerHome extends StatefulWidget {
-  const OwnerHome({Key? key}) : super(key: key);
+class SellerHome extends StatefulWidget {
+  const SellerHome({Key? key}) : super(key: key);
 
   @override
-  State<OwnerHome> createState() => _OwnerHomeState();
+  State<SellerHome> createState() => _SellerHomeState();
 }
 
-class _OwnerHomeState extends State<OwnerHome> with AutomaticKeepAliveClientMixin{
+class _SellerHomeState extends State<SellerHome> with AutomaticKeepAliveClientMixin {
   var currentPage = DrawerSections.home1;
   final GlobalKey<ScaffoldState> _key =
   GlobalKey<ScaffoldState>(debugLabel: '_homescreenkey');
@@ -30,7 +29,7 @@ class _OwnerHomeState extends State<OwnerHome> with AutomaticKeepAliveClientMixi
             key: _key,
             appBar: AppBar(
               title: const Text(
-                '1000 LKR',
+                '100 Views',
               ),
               centerTitle: true,
               actions: [
@@ -95,25 +94,25 @@ class _OwnerHomeState extends State<OwnerHome> with AutomaticKeepAliveClientMixi
                                   iconData: Icons.manage_accounts,
                                   nextScreen: EditProfile()),
                               MyListTiles(
-                                  text: 'Owner\n Dashboard',
+                                  text: 'Seller\n Dashboard',
                                   iconData: Icons.dashboard,
-                                  nextScreen: OwnerDashboard()),
+                                  nextScreen: SellerDashboard()),
                               MyListTiles(
-                                  text: 'Bus\n Manager',
-                                  iconData: Icons.directions_bus,
-                                  nextScreen: BusManager2()),
+                                  text: 'Create\n Ads',
+                                  iconData: Icons.create,
+                                  nextScreen: AdPackages(),),
                               MyListTiles(
-                                  text: 'Live\n Tracker',
-                                  iconData: Icons.add_location_alt,
-                                  nextScreen: OwnerBusTracking()),
+                                  text: 'My Ads\n Manager',
+                                  iconData: Icons.manage_history,
+                                  nextScreen: MyAds(),),
                               MyListTiles(
                                   text: 'Ads\n Section',
                                   iconData: Icons.tab,
                                   nextScreen: AdsSection()),
                               MyListTiles(
-                                  text: 'Money\n Transfer',
-                                  iconData: Icons.currency_exchange,
-                                  nextScreen: MoneyTransfer()),
+                                  text: 'Purchase\n History',
+                                  iconData: Icons.history,
+                                  nextScreen: PurchaseHistory()),
                             ],
                           ),
                         ),
@@ -169,7 +168,7 @@ class _OwnerHomeState extends State<OwnerHome> with AutomaticKeepAliveClientMixi
         switch (id) {
           case 1:
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const OwnerHome()));
+                MaterialPageRoute(builder: (context) => const SellerHome()));
             break;
           case 2:
             Navigator.push(context,
@@ -192,8 +191,8 @@ class _OwnerHomeState extends State<OwnerHome> with AutomaticKeepAliveClientMixi
                 MaterialPageRoute(builder: (context) => const AboutUs()));
             break;
           case 7:
-            //logout(context);
-            //Navigator.push(context, MaterialPageRoute(builder: (context) =>  LoginScreen()));
+          //logout(context);
+          //Navigator.push(context, MaterialPageRoute(builder: (context) =>  LoginScreen()));
             Navigator.of(context, rootNavigator: true).pushReplacement(
                 MaterialPageRoute(builder: (context) => const LoginScreen()));
 
@@ -231,5 +230,3 @@ class _OwnerHomeState extends State<OwnerHome> with AutomaticKeepAliveClientMixi
   @override
   bool get wantKeepAlive => true;
 }
-
-

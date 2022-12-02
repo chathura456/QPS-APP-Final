@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:qps_rider/screens/screens.dart';
 import '/widgets/my_widgets.dart';
 
-class ConductorHomeNavigator extends StatefulWidget {
-  const ConductorHomeNavigator({Key? key, required this.type}) : super(key: key);
+class HomePageNavigator extends StatefulWidget {
+  const HomePageNavigator({Key? key, required this.type}) : super(key: key);
   final String type;
 
   @override
-  State<ConductorHomeNavigator> createState() => _ConductorHomeNavigatorState();
+  State<HomePageNavigator> createState() => _HomePageNavigatorState();
 }
 
-class _ConductorHomeNavigatorState extends State<ConductorHomeNavigator> {
+class _HomePageNavigatorState extends State<HomePageNavigator> {
   var _currentTab = TabItem.home;
   int tabId = 0;
 
@@ -92,10 +91,10 @@ class _ConductorHomeNavigatorState extends State<ConductorHomeNavigator> {
         iconData =Icons.qr_code_2;
         break;
       case 'owner':
-        iconData =Icons.bus_alert;
+        iconData =Icons.directions_bus;
         break;
       case 'seller':
-        iconData=Icons.add;
+        iconData=Icons.add_chart;
         break;
       default:
         iconData=Icons.qr_code_2;

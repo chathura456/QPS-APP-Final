@@ -8,12 +8,12 @@ export 'login/phone_no_change.dart';
 export 'login/selectAccountType.dart';
 export 'login/welcome_page.dart';
 
-//*****************passenger********************
+//*****************conductor********************
 
 //home
 export 'conductor/home/conductor_home_page.dart';
 export 'bottom_pages/user_account.dart';
-export 'conductor/home/conductor_home_navigation.dart';
+export '../widgets/routes/homepage_navigation.dart';
 export 'bottom_pages/chat_page.dart';
 export 'bottom_pages/offers_page.dart';
 
@@ -27,13 +27,13 @@ export 'navbar_pages/app_settings.dart';
 //*****************features********************
 
 //ads section
-export 'conductor/features/ads_section/ads_section.dart';
+export 'common_features/ads_section/ads_section.dart';
 
 //bus schedules
-export 'conductor/features/bus_schedules/bus_schedules.dart';
+export 'conductor/features/conductor_dashboard/conductor_dashboard.dart';
 
 //edit profile
-export 'conductor/features/edit_profile/edit_profile.dart';
+export 'common_features//edit_profile/edit_profile.dart';
 
 //live tracker
 export 'conductor/features/live_tracker/live_tracker.dart';
@@ -44,12 +44,20 @@ export 'conductor/features/payment_history/payment_history.dart';
 //qr generate
 export 'conductor/features/qr_generator/qr_generator.dart';
 
-//ticket packages
-export 'conductor/features/ticket_packages/ticket_packages.dart';
+//Money Transfer
+export 'common_features/money_transfer/money_transfer.dart';
 
 //push notifications
-export 'conductor/features/push_notifications/push_notifications.dart';
+export 'common_features/push_notifications/push_notifications.dart';
 
-export 'model/userModel.dart';
-export 'selectScreen/homePageSelect.dart';
+export 'package:qps_rider/screens/owner/owner_home.dart';
 
+export 'package:qps_rider/screens/seller/seller_home.dart';
+
+export 'seller/features/create_ad.dart';
+
+export 'common_features/create_ad/my_ads.dart';
+
+export 'common_features/create_ad/ads_packages.dart';
+
+export 'common_features/bank_details/bank_details.dart';
