@@ -1,3 +1,4 @@
+import '../../seller/seller_home.dart';
 import '/widgets/my_widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -13,8 +14,17 @@ class _QRScanner extends State<MoneyTransfer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: commonAppBar('Money Transfer', context),
-      body: const Center(
-        child: Text('Under Development'),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Under Development'),
+            ElevatedButton(onPressed: (){
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const SellerHome()));
+            }, child: const Text('Back to Home'))
+          ],
+        ),
       ),
     );
   }

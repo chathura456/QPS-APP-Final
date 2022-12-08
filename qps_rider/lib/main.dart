@@ -18,13 +18,13 @@ class MyApp extends StatelessWidget {
       useInheritedMediaQuery: true,
       debugShowCheckedModeBanner: false,
       title: 'QPS Rider',
-      home: SplshScreen(),
+      home: SplashScreen(),
     );
   }
 }
 
-class SplshScreen extends StatelessWidget {
-  const SplshScreen({Key? key}) : super(key: key);
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

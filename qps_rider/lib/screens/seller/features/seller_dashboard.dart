@@ -8,8 +8,10 @@ class SellerDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: commonAppBar('Seller Dashboard', context),
-      body: const Center(
-        child: Text('Under Development'),
+      body: Center(
+        child: Column(children:  const [
+          Text('Under Development'),
+        ]),
       ),
     );
   }

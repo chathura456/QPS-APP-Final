@@ -59,7 +59,8 @@ class _HomePageNavigatorState extends State<HomePageNavigator> {
 
         ]),
         bottomNavigationBar: MyBottomBar(
-          onSelectTab: _selectTab, currentTab: _currentTab==TabItem.center?5:0,
+         // onSelectTab: _selectTab, currentTab: _currentTab==TabItem.center?5:0,
+          onSelectTab: _selectTab, currentTab:_selectNum(_currentTab),
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppColors.kPrimaryColor,
@@ -82,6 +83,21 @@ class _HomePageNavigatorState extends State<HomePageNavigator> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
+  }
+  
+  int _selectNum(TabItem item){
+    switch (item) {
+      case TabItem.home:
+        return 0;
+      case TabItem.offers:
+        return 1;
+      case TabItem.chat:
+        return 2;
+      case TabItem.profile:
+        return 3;
+      case TabItem.center:
+        return 4;
+    }
   }
 
   IconData _middleIcon(){

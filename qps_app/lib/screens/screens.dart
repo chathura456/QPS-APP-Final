@@ -43,6 +43,7 @@ export 'passenger/features/payment_history/payment_history.dart';
 
 //qr scan
 export 'passenger/features/qr_scan/qr_scanner.dart';
+export 'passenger/features/qr_scan/qr_details.dart';
 
 //ticket packages
 export 'passenger/features/ticket_packages/ticket_packages.dart';

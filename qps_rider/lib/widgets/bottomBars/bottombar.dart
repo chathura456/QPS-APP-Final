@@ -4,14 +4,14 @@ import '/widgets/my_widgets.dart';
 class MyBottomBar extends StatefulWidget {
   MyBottomBar({Key? key, required this.onSelectTab, required this.currentTab}) : super(key: key);
   final ValueChanged<TabItem> onSelectTab;
-  late int currentTab;
+   int currentTab;
 
   @override
   State<MyBottomBar> createState() => _MyBottomBarState();
 }
 
 class _MyBottomBarState extends State<MyBottomBar> {
-  //int currentTab = 0;
+ // int currentTab = 0;
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
@@ -42,6 +42,7 @@ class _MyBottomBarState extends State<MyBottomBar> {
                       Icon(
                         Icons.home,
                         color: widget.currentTab == 0? Colors.white : Colors.white70,
+                        //color: TabItem.values[0] == true ? Colors.white : Colors.white70,
                       ),
                       Text(
                         'Home',
@@ -75,8 +76,7 @@ class _MyBottomBarState extends State<MyBottomBar> {
                       Text(
                         'Offers',
                         style: TextStyle(
-                          color:
-                          widget.currentTab == 1 ? Colors.white : Colors.white70,
+                          color: widget.currentTab == 1 ? Colors.white : Colors.white70,
                         ),
                       )
                     ],
