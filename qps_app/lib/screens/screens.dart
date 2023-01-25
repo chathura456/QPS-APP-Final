@@ -7,6 +7,7 @@ export 'login/password_change.dart';
 export 'login/phone_no_change.dart';
 export 'login/selectAccountType.dart';
 export 'login/welcome_page.dart';
+export 'login/check_login.dart';
 
 //*****************passenger****************
 
@@ -49,6 +50,7 @@ export 'passenger/features/qr_scan/qr_details.dart';
 export 'passenger/features/ticket_packages/ticket_packages.dart';
 export 'passenger/features/ticket_packages/payment_options.dart';
 export 'passenger/features/ticket_packages/card_validator.dart';
+export 'package:qps_app/routes/login_pages_route_generator.dart';
 
 //push notifications
 export 'passenger/features/push_notifications/push_notifications.dart';

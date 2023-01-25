@@ -1,17 +1,22 @@
 import 'package:nanoid/nanoid.dart';
 import 'package:flutter/material.dart';
+import 'package:qps_app/screens/login/testhome.dart';
+import '../../main.dart';
 import '../../widgets/my_widgets.dart';
 import '../screens.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
-  static final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final GlobalKey<FormState> _regFormKey = GlobalKey<FormState>(debugLabel: '_regScreenKey');
   bool loading = false;
   var custom_id = customAlphabet('1234567890', 6);
   final TextEditingController emailController = TextEditingController();
@@ -80,13 +85,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         height: 10,
                       ),
                       Form(
-                          key: RegisterScreen._registerFormKey,
+                          key: _regFormKey,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 40, vertical: 10),
                             child: Column(
                               children: [
-                                RoundedInputField2(
+                                LatestInputField(
+                                  autoValidateMode: AutovalidateMode.onUserInteraction,
                                   validator: (value) {
                                     RegExp regex = RegExp(r'^.{3,}$');
                                     if (value!.isEmpty) {
@@ -104,7 +110,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 const SizedBox(
                                   height: 15,
                                 ),
-                                RoundedInputField2(
+                                LatestInputField(
+                                  autoValidateMode: AutovalidateMode.onUserInteraction,
                                   validator: (value) {
                                     if (value!.isEmpty) {
                                       return ("Please Enter your Email");
@@ -123,7 +130,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 const SizedBox(
                                   height: 15,
                                 ),
-                                RoundedInputField2(
+                                LatestInputField(
+                                  keyboardType: TextInputType.number,
+                                  autoValidateMode: AutovalidateMode.onUserInteraction,
                                   validator: (value) {
                                     if (value!.isEmpty) {
                                       return ("Phone Number cannot be null");
@@ -137,7 +146,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 const SizedBox(
                                   height: 15,
                                 ),
-                                RoundedInputField2(
+                                LatestInputField(
+                                  keyboardType: TextInputType.number,
+                                  autoValidateMode: AutovalidateMode.onUserInteraction,
                                   validator: (value) {
                                     RegExp regex = RegExp(r'^.{6,}$');
                                     if (value!.isEmpty) {
@@ -155,7 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 const SizedBox(
                                   height: 15,
                                 ),
-                                loading
+                                /*loading
                                     ? const Loading()
                                     : RoundedButton(
                                         text: 'Sign up',
@@ -167,7 +178,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                       const VerifyOTP()));
                                           //signUp(emailController.text,passwordController.text);
                                         },
-                                      ),
+                                      ),*/
+                                loading
+                                    ? const Loading()
+                                    :RoundedButton(
+                                  text: 'Sign up',
+                                  press: () {
+                                    signUp();
+                                    /*Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                            const VerifyOTP()));*/
+                                    //signUp(emailController.text,passwordController.text);
+                                  },
+                                ),
                                 UnderPart(
                                     navigatorText: "Login here",
                                     title: "Already have an account?",
@@ -190,5 +215,64 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  Future signUp() async {
+    final isValid = _regFormKey.currentState!.validate();
+    if (!isValid) {
+      Fluttertoast.showToast(msg: 'check again you entered data!!');
+      return;}
+    setState(() {
+      loading = true;
+    });
+
+    try{
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text).then((value) async {
+            try{
+              final db =  FirebaseFirestore.instance;
+              final newUser = UserModel(
+                  email: value.user?.email,
+                  name: nameController.text.trim(),
+                  type: 'Passenger',
+                  phone: phoneController.text.trim(),
+                points: '100'
+              );
+              await db.collection("Users").doc(value.user?.uid).set(newUser.toMap()).then((value) {
+                Fluttertoast.showToast(msg: 'User Registration Success!!');
+                navigatorKey.currentState!.popUntil((route) => route.isFirst);
+              });
+
+            }on FirebaseException catch (e){
+              Fluttertoast.showToast(msg: '${e.message}');
+            }
+      });
+
+    }on FirebaseAuthException catch (e) {
+      Fluttertoast.showToast(msg: '${e.message}');
+
+    }
+    setState(() {
+      loading = false;
+    });
+
+    
+    /*
+    * try{
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text).whenComplete(() {
+        Fluttertoast.showToast(msg: 'User Create Success');
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                const TestHomePage()));
+
+      });
+
+    }on FirebaseAuthException catch (e) {
+      Fluttertoast.showToast(msg: '${e.message}');
+
+    }*/
   }
 }

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "629417803901",
+    "project_id": "qps-database",
+    "storage_bucket": "qps-database.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:629417803901:android:32cfacb5b4197025717114",
+        "android_client_info": {
+          "package_name": "com.example.qps_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "629417803901-55eg9pot4g342djukvl238ak8re59krh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAj1Z8cvarP2oJVyuCXWOWAofwxB22mxms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "629417803901-55eg9pot4g342djukvl238ak8re59krh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "629417803901-4rsb7sqqt2e5ve93nq5d1fog5rq50ifm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.qpsApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

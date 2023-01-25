@@ -21,3 +21,4 @@ export 'buttons/button_style2.dart';
 export 'buttons/border_button.dart';
 export 'inputFields/custom_input_field.dart';
 export 'inputFields/custom_textInput_field.dart';
+export 'inputFields/latest_input_filed.dart';

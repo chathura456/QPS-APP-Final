@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:qps_rider/screens/routes/login_routes.dart';
 import '/widgets/my_widgets.dart';
 import '/screens/screens.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
-  runApp(const MyApp());
+main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp(),);
 }
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -14,11 +23,24 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      useInheritedMediaQuery: true,
-      debugShowCheckedModeBanner: false,
-      title: 'QPS Rider',
-      home: SplashScreen(),
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: MaterialApp(
+        useInheritedMediaQuery: true,
+        debugShowCheckedModeBanner: false,
+        title: 'QPS Rider',
+        //home: SplashScreen(),
+        navigatorKey: navigatorKey,
+        //home: const SelectLogin(),
+        initialRoute: '/',
+        onGenerateRoute: RouteGenerator.generateRoute,
+      ),
     );
   }
 }

@@ -7,6 +7,8 @@ export 'login/password_change.dart';
 export 'login/phone_no_change.dart';
 export 'login/selectAccountType.dart';
 export 'login/welcome_page.dart';
+export 'login/test_home.dart';
+export 'login/check_login.dart';
 
 //*****************conductor********************
 
@@ -61,3 +63,5 @@ export 'common_features/create_ad/my_ads.dart';
 export 'common_features/create_ad/ads_packages.dart';
 
 export 'common_features/bank_details/bank_details.dart';
+
+export 'model/userModel.dart';

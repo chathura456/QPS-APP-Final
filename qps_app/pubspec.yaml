@@ -57,7 +57,10 @@ dev_dependencies:
   carousel_pro_nullsafety: ^1.0.2
   qr_code_scanner: ^1.0.1
   lottie: ^2.1.0
-  intl: ^0.18.0
+  intl:
+  firebase_core: ^2.4.1
+  firebase_auth: ^4.2.5
+  cloud_firestore: ^4.3.1
 
 flutter_app_name:
   name: "QPS Passenger"

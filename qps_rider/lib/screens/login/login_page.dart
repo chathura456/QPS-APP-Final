@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import '../../main.dart';
 import '../../widgets/my_widgets.dart';
 import '../screens.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -12,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool loading = false;
+  final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>(debugLabel: '_loginscreenkey');
 
   final TextEditingController emailController = TextEditingController();
 
@@ -47,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
               //Body elements design
               body: SingleChildScrollView(
                 keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
+                ScrollViewKeyboardDismissBehavior.onDrag,
                 physics: const BouncingScrollPhysics(),
                 child: Center(
                   child: Column(
@@ -65,10 +68,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const Padding(
                         padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 40),
                         child: AppText(
                           text:
-                              'Please Sign in to your Account to continue with QPS App',
+                          'Please Sign in to your Account to continue with QPS App',
                           fontWeight: FontWeight.w500,
                           size: 15,
                         ),
@@ -77,13 +80,30 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 10,
                       ),
                       Form(
-                          key: LoginScreen._formKey,
+                          key: _loginFormKey,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 40, vertical: 10),
                             child: Column(
                               children: [
-                                MyInputField(
+                                LatestInputField(
+                                  controller: emailController,
+                                  hintText: 'Email Address',
+                                  icon: Icons.email,
+                                  autoValidateMode: AutovalidateMode.onUserInteraction,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return ("Please Enter your Email");
+                                    }
+                                    if (!RegExp(
+                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                        .hasMatch(value)) {
+                                      return ("please Enter a Valid Email");
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                /*RoundedInputField2(
                                   validator: (value) {
                                     if (value!.isEmpty) {
                                       return ("Please Enter your Email");
@@ -98,11 +118,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   controller: emailController,
                                   hintText: "Email Address",
                                   icon: Icons.email,
-                                ),
+                                ),*/
                                 const SizedBox(
                                   height: 15,
                                 ),
-                                MyInputField(
+                                LatestInputField(
+                                  autoValidateMode: AutovalidateMode.onUserInteraction,
                                   validator: (value) {
                                     RegExp regex = RegExp(r'^.{6,}$');
                                     if (value!.isEmpty) {
@@ -114,9 +135,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     return null;
                                   },
                                   controller: passwordController,
+                                  hintText: 'Password',
                                   isPassword: true,
                                   icon: Icons.key,
-                                  hintText: 'Password',
                                 ),
                                 const SizedBox(
                                   height: 7,
@@ -126,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   children: [
                                     Padding(
                                       padding:
-                                          const EdgeInsets.fromLTRB(0, 0, 2, 0),
+                                      const EdgeInsets.fromLTRB(0, 0, 2, 0),
                                       child: TextLinks(
                                           navigatorText: 'Forget Password?',
                                           size: 15.5,
@@ -136,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        const ForgetPasswordScreen()));
+                                                    const ForgetPasswordScreen()));
                                           }),
                                     ),
                                   ],
@@ -147,33 +168,39 @@ class _LoginScreenState extends State<LoginScreen> {
                                 loading
                                     ? const Loading()
                                     : RoundedButton(
-                                        text: 'Sign in',
-                                        press: () {
-                                          /* Navigator.push(
+                                  text: 'Sign in',
+                                  press: () {
+                                    /* Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => const HomePageNavigator()));*/
-                                          Navigator.pushReplacement(
+                                    /*Navigator.pushReplacement(
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const HomePageNavigator(type: 'conductor',),
-                                              ));
+                                                    const HomePageNavigator(),
+                                              ));*/
+                                    /* Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                              builder: (context) =>
+                                          const TestHomePage()));*/
+                                    signIn();
 
-                                          //signIn(emailController.text, passwordController.text, context);
-                                        },
-                                      ),
+                                    //signIn(emailController.text, passwordController.text, context);
+                                  },
+                                ),
                                 UnderPart(
                                     navigatorText: "Register here",
                                     title: "Don't have an account?",
                                     onTap: () {
-                                      LoginScreen._formKey.currentState
+                                      _loginFormKey.currentState
                                           ?.reset();
                                       Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const RegisterScreen()));
+                                              const RegisterScreen()));
                                     }),
                               ],
                             ),
@@ -187,5 +214,37 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Future signIn() async {
+    final isValid = _loginFormKey.currentState!.validate();
+    if (!isValid) {
+      Fluttertoast.showToast(msg: 'check again you entered data!!');
+      return;
+    }
+    setState(() {
+      loading = true;
+    });
+    try{
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text).then((value) {
+        Fluttertoast.showToast(msg: 'Login Success!!');
+        navigatorKey.currentState!.popUntil((route) => route.isFirst);
+      });
+
+    }on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        Fluttertoast.showToast(msg: 'You Entered wrong email!!');
+      } else if (e.code == 'wrong-password') {
+        Fluttertoast.showToast(msg: 'You Entered wrong Password!!');
+      }else{
+        Fluttertoast.showToast(msg: '${e.message}');}
+    }
+    setState(() {
+      loading = false;
+    });
+
+
+
   }
 }
