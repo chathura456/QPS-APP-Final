@@ -65,3 +65,6 @@ export 'common_features/create_ad/ads_packages.dart';
 export 'common_features/bank_details/bank_details.dart';
 
 export 'model/userModel.dart';
+export 'model/conductor_model.dart';
+export 'model/seller_model.dart';
+export 'model/owner_model.dart';

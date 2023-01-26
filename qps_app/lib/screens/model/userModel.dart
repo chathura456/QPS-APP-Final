@@ -1,3 +1,5 @@
+import 'package:qps_app/screens/model/passenger_model.dart';
+
 class UserModel {
   String? uid;
   String? email;
@@ -5,9 +7,10 @@ class UserModel {
   String? type;
   String? name;
   String? points;
+  PassengerModel? passenger;
 
   UserModel(
-      {this.uid, this.email, this.phone, this.type, this.name, this.points});
+      {this.uid, this.email, this.phone, this.type, this.name, this.points,this.passenger});
 
   factory UserModel.fromMap(map) {
     return UserModel(
@@ -30,4 +33,7 @@ class UserModel {
       'Points': points,
     };
   }
+  Map<String,dynamic>updateIdJason()=>{
+    "UserID":uid,
+  };
 }

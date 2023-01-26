@@ -1,7 +1,14 @@
 import 'package:qps_rider/screens/login/verify_otp.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:qps_rider/screens/model/conductor_model.dart';
+import 'package:qps_rider/screens/model/owner_model.dart';
+import 'package:qps_rider/screens/model/seller_model.dart';
+import '../../main.dart';
+import '../model/userModel.dart';
 import '/widgets/my_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AccountSelect extends StatefulWidget {
   const AccountSelect({Key? key}) : super(key: key);
@@ -11,6 +18,7 @@ class AccountSelect extends StatefulWidget {
 }
 
 class _AccountSelect extends State<AccountSelect> {
+  final User? user = FirebaseAuth.instance.currentUser;
   String? acctype;
   String? _genderRadioBtnVal;
 
@@ -158,17 +166,22 @@ class _AccountSelect extends State<AccountSelect> {
                                   builder: (context) => MyDialogBox(
                                       type: acctype!,
                                       press: () {
-                                        Navigator.pushReplacement(
+                                        updateAccType();
+                                       /* Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const VerifyOTP()));
+                                                    const VerifyOTP()));*/
                                       }));
                             }
                           },
                         ),
                       ],
                     )),
+                    const SizedBox(height: 20,),
+                    ElevatedButton(onPressed: (){
+                      signOut();
+                    }, child: const Text('Logout'))
                   ],
                 ),
               ),
@@ -198,5 +211,70 @@ class _AccountSelect extends State<AccountSelect> {
         acctype = "Seller";
       }
     });
+  }
+  Future<void>signOut()async{
+    await FirebaseAuth.instance.signOut();
+  }
+
+  Future updateAccType() async{
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+    try{
+      final userRef= FirebaseFirestore.instance.collection("Users").doc(user?.uid);
+
+      final currentUser = UserModel(
+        type: acctype,
+        //passenger: passenger
+      );
+      await userRef.update(currentUser.updateAccTypeJason());
+      if(acctype == 'Conductor'){
+        const conductor = ConductorModel(
+            payment: '',
+          amount: ''
+        );
+        await userRef.collection('Payment_History').doc(user?.uid).set(conductor.toJason()).whenComplete(() async {
+           const curruntBus = CurrentBus(
+             owner: '',
+             duration: ''
+           );
+           await userRef.collection('CurrentBus').doc(user?.uid).set(curruntBus.toJason());
+        });
+      }
+      else if(acctype == 'Owner'){
+        const owner = OwnerModel(
+            route: '',
+            busNo: ''
+        );
+        await userRef.collection('Bus_Details').doc(user?.uid).set(owner.toJason()).whenComplete(() async {
+          const bankDetails = BankDetailsModel(
+            bank: '',
+            branch: ''
+          );
+          await userRef.collection('Bank_Details').doc(user?.uid).set(bankDetails.toJason());
+        });
+      }else if(acctype == 'Seller'){
+        const seller = SellerModel(
+            package: '',
+          type: ''
+        );
+        await userRef.collection('Create_Ad').doc(user?.uid).set(seller.toJason()).whenComplete(() async {
+          const myAds = MyAdsModel(
+              adID: '',
+            views: ''
+          );
+          await userRef.collection('My_Ads').doc(user?.uid).set(myAds.toJason());
+        });
+      }
+    }on FirebaseException catch (e){
+      Fluttertoast.showToast(msg: '${e.message}');
+    }
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 }

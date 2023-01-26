@@ -57,4 +57,5 @@ export 'passenger/features/push_notifications/push_notifications.dart';
 
 export 'model/userModel.dart';
 export 'selectScreen/homePageSelect.dart';
+export 'model/passenger_model.dart';
 

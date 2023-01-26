@@ -233,14 +233,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
           final newUser = UserModel(
               email: value.user?.email,
               name: nameController.text.trim(),
-              type: 'Passenger',
               phone: phoneController.text.trim(),
               points: '100'
           );
           await db.collection("Users").doc(value.user?.uid).set(newUser.toMap()).then((value) {
             Fluttertoast.showToast(msg: 'User Registration Success!!');
             navigatorKey.currentState!.popUntil((route) => route.isFirst);
-          });
+          }).whenComplete(() async {
+            try{
+              final sfDocRef = db.collection("Users").doc('counter');
+              await db.runTransaction((transaction) async {
+                final snapshot = await transaction.get(sfDocRef);
+                // Note: this could be done without a transaction
+                //       by updating the population using FieldValue.increment()
+                final lastID = snapshot.get("latest");
+                String newID = (int.parse(lastID)+1).toString();
+                try{
+                  final userRef= FirebaseFirestore.instance.collection("Users").doc(value.user?.uid);
+                  final currentUser = UserModel(
+                      uid: newID
+                  );
+                  await userRef.update(currentUser.updateIdJason()
+                  );
+                }on FirebaseException catch (e){
+                  Fluttertoast.showToast(msg: '${e.message}');
+                }
+                transaction.update(sfDocRef, {"latest": newID},);
+              });
+            }on FirebaseException catch (e){
+              Fluttertoast.showToast(msg: '${e.message}');
+            }
+          });;
 
         }on FirebaseException catch (e){
           Fluttertoast.showToast(msg: '${e.message}');
@@ -251,9 +274,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Fluttertoast.showToast(msg: '${e.message}');
 
     }
-    setState(() {
-      loading = false;
-    });
+    if(mounted){
+      setState(() {
+        loading = false;
+      });
+    }
+
 
 
     /*
