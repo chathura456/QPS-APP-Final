@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:qps_rider/screens/conductor/features/active_bus/active_bus.dart';
 import '../../../widgets/my_widgets.dart';
 import '../../screens.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 class ConductorHome extends StatefulWidget {
   const ConductorHome({Key? key}) : super(key: key);
@@ -15,6 +18,34 @@ class _ConductorHomeState extends State<ConductorHome>
   var currentPage = DrawerSections.home1;
   final GlobalKey<ScaffoldState> _key =
       GlobalKey<ScaffoldState>(debugLabel: '_homescreenkey');
+  User? user=FirebaseAuth.instance.currentUser;
+  UserModel loginUser = UserModel();
+  ConductorModel conductor = const ConductorModel();
+
+  @override
+  void initState(){
+    super.initState();
+    var db = FirebaseFirestore.instance.collection("Users").doc(user!.uid);
+    db.get().then((value) {
+      setState(() {
+        loginUser= UserModel.fromMap(value.data());
+      });
+
+      db.collection('Payment_History').doc(user!.uid).get().then((value1) => {
+        if(mounted){
+          setState(() {
+            loginUser.conductorModel = ConductorModel.fromMap(value1.data());
+          })
+        }
+
+      });
+      if(mounted){
+        setState(() {
+          Provider.of<UserProvider>(context, listen: false).setUser(loginUser);
+        });
+      }
+
+    } );}
 
   @override
   build(context) {
@@ -28,8 +59,9 @@ class _ConductorHomeState extends State<ConductorHome>
           child: Scaffold(
             key: _key,
             appBar: AppBar(
-              title: const Text(
-                '100 LKR',
+              title: Text(
+                //'${loginUser.points} LKR',
+                '${loginUser.conductorModel?.amount} LKR',
               ),
               centerTitle: true,
               actions: [
@@ -200,8 +232,9 @@ class _ConductorHomeState extends State<ConductorHome>
             break;
           case 7:
             //Navigator.push(context, MaterialPageRoute(builder: (context) =>  LoginScreen()));
-            Navigator.of(context, rootNavigator: true).pushReplacement(
-                MaterialPageRoute(builder: (context) => const LoginScreen()));
+            /*Navigator.of(context, rootNavigator: true).pushReplacement(
+                MaterialPageRoute(builder: (context) => const LoginScreen()));*/
+          logout(context);
 
             break;
         }
@@ -232,6 +265,10 @@ class _ConductorHomeState extends State<ConductorHome>
         ),
       ),
     );
+  }
+
+  Future<void> logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
   }
 
 

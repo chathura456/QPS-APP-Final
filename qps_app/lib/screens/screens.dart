@@ -58,4 +58,6 @@ export 'passenger/features/push_notifications/push_notifications.dart';
 export 'model/userModel.dart';
 export 'selectScreen/homePageSelect.dart';
 export 'model/passenger_model.dart';
+export 'package:qps_app/provider/user_service.dart';
+export 'login/next_page.dart';
 

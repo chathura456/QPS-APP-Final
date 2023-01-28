@@ -236,17 +236,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   name: nameController.text.trim(),
                   type: 'Passenger',
                   phone: phoneController.text.trim(),
-                points: '100'
+                points: '000'
               );
               await db.collection("Users").doc(value.user?.uid).set(newUser.toMap()).then((value) {
                 Fluttertoast.showToast(msg: 'User Registration Success!!');
                 navigatorKey.currentState!.popUntil((route) => route.isFirst);
               }).whenComplete(() async {
                 const passenger = PassengerModel(
-                  payment: '',
-                  amount: '',
-                  date: '',
-                  description: ''
+                  payment: 'no data',
+                  amount: '1256',
+                  date: 'no data',
+                  description: 'no data'
                 );
                 //await db.collection('Payment_History').doc(value.user?.uid).set(passenger.toJason());
                 await db.collection("Users").doc(value.user?.uid).collection('Payment_History').doc(value.user?.uid).set(passenger.toJason());

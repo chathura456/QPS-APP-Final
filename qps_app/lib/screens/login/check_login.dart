@@ -27,7 +27,8 @@ class _LoginStatusCheckState extends State<LoginStatusCheck> {
           }
           if (snapshot.connectionState == ConnectionState.active){
             if(snapshot.hasData){
-                return const TestHomePage();
+                return const HomePageNavigator();
+              //return const TestHomePage();
             }
             else if(snapshot.hasError){
               return const Center(child: Text('wrong credentials'));

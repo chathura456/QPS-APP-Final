@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:qps_app/screens/passenger/features/qr_scan/qr_scanner.dart';
 import 'package:qps_app/widgets/my_widgets.dart';
 import '../../../widgets/routes/tab_navigator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:qps_app/screens/screens.dart';
+import 'package:provider/provider.dart';
+
 
 
 class HomePageNavigator extends StatefulWidget {
@@ -12,6 +18,7 @@ class HomePageNavigator extends StatefulWidget {
 }
 
 class _HomePageNavigatorState extends State<HomePageNavigator> {
+
   var _currentTab = TabItem.home;
 
   final _navigatorKeys = {

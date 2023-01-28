@@ -44,7 +44,38 @@ class _PaymentOptionsState extends State<PaymentOptions> {
       },
       child: Scaffold(
         backgroundColor: AppColors.kPrimaryColor,
-        appBar: commonAppBar('Payment Options', context),
+        appBar: AppBar(
+          title: const Text('Payment Options'),
+          centerTitle: false,
+          titleSpacing: 0.0,
+          backgroundColor: AppColors.kPrimaryColor,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 15),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              color: Colors.white,
+              onPressed: (){
+                /*setState(() {
+                  value = 0;
+                });*/
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                        const TicketPackages(balance: 100)));
+              },
+            ),
+          ),
+          /*leading: GestureDetector(
+      child: const Icon(
+        Icons.arrow_back_ios,
+        color: Colors.white,
+      ),
+      onTap: () {
+        Navigator.pop(context);
+      },
+    ),*/
+        ),
         body: Container(
           height: double.infinity,
           decoration: const BoxDecoration(

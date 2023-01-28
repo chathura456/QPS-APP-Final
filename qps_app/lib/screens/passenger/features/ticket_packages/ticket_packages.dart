@@ -2,6 +2,7 @@ import 'package:qps_app/widgets/my_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:qps_app/screens/screens.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class TicketPackages extends StatefulWidget {
   const TicketPackages({Key? key, required this.balance}) : super(key: key);
@@ -19,9 +20,11 @@ class _QRScanner extends State<TicketPackages> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: commonAppBar('Ticket Packages', context),
-        body: SingleChildScrollView(
+    return Consumer<UserProvider>(
+      builder: (context, userProvider, child ){
+        return Scaffold(
+          appBar: commonAppBar('Ticket Packages ${userProvider.user.passenger?.amount}', context),
+          body: SingleChildScrollView(
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Column(
@@ -38,10 +41,10 @@ class _QRScanner extends State<TicketPackages> {
                     ],
                   ),
                   const SizedBox(height: 10,),
-                      Visibility(
-                        maintainState: true,
-                        visible: id!=4,
-                          child: Column(
+                  Visibility(
+                      maintainState: true,
+                      visible: id!=4,
+                      child: Column(
                         children: [
                           SizedBox(
                             width: MediaQuery.of(context).size.width,
@@ -161,7 +164,7 @@ class _QRScanner extends State<TicketPackages> {
                         });
                       }
                       if(package!=''){
-                        Navigator.push(context,
+                        Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) => PaymentOptions(package: package,)));}
                       else{
                         Fluttertoast.showToast(msg: 'Please Select Ticket Package');
@@ -170,7 +173,7 @@ class _QRScanner extends State<TicketPackages> {
 
                   },),
                   id==4?TextButton(onPressed: (){
-                   if(mounted) {
+                    if(mounted) {
                       setState(() {
                         id=0;
                         if(package!=''){
@@ -179,12 +182,12 @@ class _QRScanner extends State<TicketPackages> {
                       });
                     }
                   }, child: const Text('Switch to Select Packages',style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: AppColors.kPrimaryColor,fontSize: 16
+                      decoration: TextDecoration.underline,
+                      color: AppColors.kPrimaryColor,fontSize: 16
                   ),)):const SizedBox(height: 10,),
                   BorderButton(text: 'Send Credits to Friend',press: (){},),
                   BorderButton(text: 'Purchase history',press: (){},),
-                 // Text(package),
+                  // Text(package),
                   const SizedBox(height: 80,),
 
 
@@ -194,6 +197,9 @@ class _QRScanner extends State<TicketPackages> {
               ),
             ),
           ),
+
+        );
+      },
 
     );
   }

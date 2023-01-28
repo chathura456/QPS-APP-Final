@@ -5,13 +5,19 @@ import 'package:qps_app/screens/screens.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:provider/provider.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp(),);
+  runApp(
+      MultiProvider(providers: [
+        ChangeNotifierProvider(create: (context)=> UserProvider())
+      ],child: const MyApp(),
+      )
+  );
 }
 
 final navigatorKey = GlobalKey<NavigatorState>();

@@ -178,10 +178,10 @@ class _AccountSelect extends State<AccountSelect> {
                         ),
                       ],
                     )),
-                    const SizedBox(height: 20,),
-                    ElevatedButton(onPressed: (){
+                    //const SizedBox(height: 20,),
+                    /*ElevatedButton(onPressed: (){
                       signOut();
-                    }, child: const Text('Logout'))
+                    }, child: const Text('Logout'))*/
                   ],
                 ),
               ),
@@ -236,38 +236,44 @@ class _AccountSelect extends State<AccountSelect> {
       await userRef.update(currentUser.updateAccTypeJason());
       if(acctype == 'Conductor'){
         const conductor = ConductorModel(
-            payment: '',
-          amount: ''
+            payment: 'no data',
+          amount: 'no data',
+          description: 'no data',
+          date: 'no data'
         );
         await userRef.collection('Payment_History').doc(user?.uid).set(conductor.toJason()).whenComplete(() async {
            const curruntBus = CurrentBus(
-             owner: '',
-             duration: ''
+             owner: 'no data',
+             duration: 'no data',
+             busNo: 'no data',
            );
            await userRef.collection('CurrentBus').doc(user?.uid).set(curruntBus.toJason());
         });
       }
       else if(acctype == 'Owner'){
         const owner = OwnerModel(
-            route: '',
-            busNo: ''
+            route: 'no data',
+            busNo: 'no data',
+          income: 'no data',
         );
         await userRef.collection('Bus_Details').doc(user?.uid).set(owner.toJason()).whenComplete(() async {
           const bankDetails = BankDetailsModel(
-            bank: '',
-            branch: ''
+            bank: 'no data',
+            branch: 'no data',
+            accNo: 'no data',
           );
           await userRef.collection('Bank_Details').doc(user?.uid).set(bankDetails.toJason());
         });
       }else if(acctype == 'Seller'){
         const seller = SellerModel(
-            package: '',
-          type: ''
+            package: 'no data',
+          type: 'no data',
+          duration: '12 sec'
         );
         await userRef.collection('Create_Ad').doc(user?.uid).set(seller.toJason()).whenComplete(() async {
           const myAds = MyAdsModel(
-              adID: '',
-            views: ''
+              adID: 'no data',
+            views: 'no data',
           );
           await userRef.collection('My_Ads').doc(user?.uid).set(myAds.toJason());
         });

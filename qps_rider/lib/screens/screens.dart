@@ -68,3 +68,4 @@ export 'model/userModel.dart';
 export 'model/conductor_model.dart';
 export 'model/seller_model.dart';
 export 'model/owner_model.dart';
+export 'package:qps_rider/provider/user_service.dart';

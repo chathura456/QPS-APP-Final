@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:qps_rider/provider/user_service.dart';
 import 'package:qps_rider/screens/routes/login_routes.dart';
 import '/widgets/my_widgets.dart';
 import '/screens/screens.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:provider/provider.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp(),);
+  runApp(
+      MultiProvider(providers: [
+        ChangeNotifierProvider(create: (context)=> UserProvider())
+      ],child: const MyApp(),
+      )
+  );
 }
 
 final navigatorKey = GlobalKey<NavigatorState>();

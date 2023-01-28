@@ -4,6 +4,9 @@ import 'package:qps_rider/screens/owner/features/owner_bus_tracking/owner_bus_tr
 import 'package:qps_rider/screens/owner/features/owner_dashboard/owner_dashboard.dart';
 import '../../../widgets/my_widgets.dart';
 import '../screens.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 class OwnerHome extends StatefulWidget {
   const OwnerHome({Key? key}) : super(key: key);
@@ -16,6 +19,40 @@ class _OwnerHomeState extends State<OwnerHome> with AutomaticKeepAliveClientMixi
   var currentPage = DrawerSections.home1;
   final GlobalKey<ScaffoldState> _key =
   GlobalKey<ScaffoldState>(debugLabel: '_homescreenkey');
+  User? user=FirebaseAuth.instance.currentUser;
+  UserModel loginUser = UserModel();
+  OwnerModel owner = const OwnerModel();
+
+  @override
+  void initState(){
+    super.initState();
+    var db = FirebaseFirestore.instance.collection("Users").doc(user!.uid);
+    db.get().then((value) {
+      setState(() {
+        loginUser= UserModel.fromMap(value.data());
+      });
+
+
+
+
+    } ).whenComplete(() {
+      db.collection('Bus_Details').doc(user!.uid).get().then((value1) => {
+        if(mounted){
+          setState(() {
+            loginUser.ownerModel = OwnerModel.fromMap(value1.data());
+          })
+        }
+
+      });
+
+    }).whenComplete(() {
+      if(mounted){
+        setState(() {
+          Provider.of<UserProvider>(context, listen: false).setUser(loginUser);
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +66,9 @@ class _OwnerHomeState extends State<OwnerHome> with AutomaticKeepAliveClientMixi
           child: Scaffold(
             key: _key,
             appBar: AppBar(
-              title: const Text(
-                '1000 LKR',
+              title: Text(
+                //'1000 LKR',
+                '${loginUser.type} LKR',
               ),
               centerTitle: true,
               actions: [
@@ -194,8 +232,9 @@ class _OwnerHomeState extends State<OwnerHome> with AutomaticKeepAliveClientMixi
           case 7:
             //logout(context);
             //Navigator.push(context, MaterialPageRoute(builder: (context) =>  LoginScreen()));
-            Navigator.of(context, rootNavigator: true).pushReplacement(
-                MaterialPageRoute(builder: (context) => const LoginScreen()));
+           /* Navigator.of(context, rootNavigator: true).pushReplacement(
+                MaterialPageRoute(builder: (context) => const LoginScreen()));*/
+          logout(context);
 
             break;
         }
@@ -226,6 +265,10 @@ class _OwnerHomeState extends State<OwnerHome> with AutomaticKeepAliveClientMixi
         ),
       ),
     );
+  }
+
+  Future<void> logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
   }
 
   @override

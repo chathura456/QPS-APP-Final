@@ -43,11 +43,11 @@ class _LoginStatusCheckState extends State<LoginStatusCheck> {
                   UserModel loginUser=UserModel();
                   loginUser= UserModel.fromMap(snapshot.data);
                   if(loginUser.type == 'Conductor'){
-                    return const TestHomePage();
+                    return const HomePageNavigator(type: 'conductor');
                   }else if(loginUser.type == 'Owner'){
-                    return const TestHomePage();
+                    return const HomePageNavigator(type: 'owner');
                   }else if(loginUser.type == 'Seller'){
-                    return const TestHomePage();
+                    return const HomePageNavigator(type: 'seller');
                   }
                   else {
                     return const AccountSelect();
