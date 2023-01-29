@@ -191,7 +191,7 @@ class _QrDetailsState extends State<QrDetails> {
                           ),
                           onPressed: () {
                             stopTimer();
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePageNavigator(),));
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PassengerHome(),));
                           },
                           child: const Text(
                             'Continue',
@@ -291,7 +291,7 @@ class _QrDetailsState extends State<QrDetails> {
                  // fixedSize: const Size(100, 50), //////// HERE
                 ),
                 onPressed: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePageNavigator(),));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PassengerHome(),));
                 },
                 child: const Text(
                   'OK',

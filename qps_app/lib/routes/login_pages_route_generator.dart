@@ -13,8 +13,8 @@ class RouteGenerator{
         return MaterialPageRoute(builder: (_)=>const LoginScreen());
       case '/register':
         return MaterialPageRoute(builder: (_)=>const RegisterScreen());
-      case '/home':
-        return MaterialPageRoute(builder: (_)=>const TestHomePage());
+     /* case '/home':
+        return MaterialPageRoute(builder: (_)=>const TestHomePage());*/
       /*case '/welcome':
         return MaterialPageRoute(builder: (_)=>const WelcomePage());*/
       default:

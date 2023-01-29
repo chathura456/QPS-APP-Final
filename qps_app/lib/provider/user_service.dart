@@ -14,7 +14,7 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
-
+/*
 class UserService {
   //...
   Future<UserModel> getUserData(String uid) async {
@@ -71,3 +71,5 @@ class UserDataConsumer extends StatelessWidget {
     );
   }
 }
+
+ */

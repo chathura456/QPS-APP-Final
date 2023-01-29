@@ -36,4 +36,20 @@ class UserModel {
   Map<String,dynamic>updateIdJason()=>{
     "UserID":uid,
   };
+
+  void updateUserData({String? uid,
+  String? email,
+  String? phone,
+  String? type,
+  String? name,
+  String? points,
+  PassengerModel? passenger}) {
+    this.uid = uid;
+    this.passenger = passenger;
+    this.points = points;
+    this.type = type;
+    this.phone = phone;
+    this.name = name;
+    this.email = email;
+  }
 }

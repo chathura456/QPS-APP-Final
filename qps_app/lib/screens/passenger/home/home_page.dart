@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class PassengerHome extends StatefulWidget {
   const PassengerHome({Key? key}) : super(key: key);
 
+
   @override
   State<PassengerHome> createState() => _PassengerHomeState();
 }
@@ -20,9 +21,25 @@ class _PassengerHomeState extends State<PassengerHome>
   GlobalKey<ScaffoldState>(debugLabel: '_homescreenkey');
   final int balance = 100;
   User? user=FirebaseAuth.instance.currentUser;
-  UserModel loginUser = UserModel();
+  UserModel loginData = UserModel();
   PassengerModel passenger = const PassengerModel();
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    var db = FirebaseFirestore.instance.collection("Users").doc(user!.uid);
+    db.get().then((value) {
+      setState(() {
+        loginData = UserModel.fromMap(value.data());
+        print('home init state');
+      });
+    });
+
+  }
+
+
+/*
   @override
   void initState(){
     super.initState();
@@ -48,7 +65,7 @@ class _PassengerHomeState extends State<PassengerHome>
 
 
 
-  }
+  }*/
 
   @override
   build(context) {
@@ -62,8 +79,10 @@ class _PassengerHomeState extends State<PassengerHome>
           child: Scaffold(
             key: _key,
             appBar: AppBar(
-              title: Text(
-                '${loginUser.points} LKR',
+              title:  Text(
+                //'000 LKR'
+                loginData.points!=null?
+                '${loginData.points} LKR': '',
               ),
               centerTitle: true,
               actions: [
