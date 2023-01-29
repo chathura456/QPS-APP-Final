@@ -37,7 +37,20 @@ class _PassengerHomeState extends State<PassengerHome>
     });
 
   }
-
+/*
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    var db = FirebaseFirestore.instance.collection("Users").doc(user!.uid);
+    db.get().then((value) {
+      setState(() {
+        loginData = UserModel.fromMap(value.data());
+        print('home init state');
+      });
+    });
+  }
+*/
 
 /*
   @override
@@ -70,6 +83,7 @@ class _PassengerHomeState extends State<PassengerHome>
   @override
   build(context) {
     super.build(context);
+    final userNew = Provider.of<UserProvider>(context).user;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Container(
@@ -80,9 +94,10 @@ class _PassengerHomeState extends State<PassengerHome>
             key: _key,
             appBar: AppBar(
               title:  Text(
+                  '${userNew?.points} LKR'
                 //'000 LKR'
-                loginData.points!=null?
-                '${loginData.points} LKR': '',
+                /*loginData.points!=null?
+                '${loginData.points} LKR': '',*/
               ),
               centerTitle: true,
               actions: [
@@ -102,7 +117,7 @@ class _PassengerHomeState extends State<PassengerHome>
             drawer: Drawer(
               child: Column(
                 children: [
-                  const DrawerHeader1(),
+                  DrawerHeader1(userID: '${userNew?.uid}',name: '${userNew?.name}',),
                   navList(),
                 ],
               ),

@@ -31,7 +31,7 @@ class _HomePageNavigatorState extends State<HomePageNavigator> {
     TabItem.chat: GlobalKey<NavigatorState>(),
     TabItem.profile: GlobalKey<NavigatorState>(),
   };
-
+/*
   @override
   void initState(){
     super.initState();
@@ -54,7 +54,7 @@ class _HomePageNavigatorState extends State<HomePageNavigator> {
         });
       });
     }
-  }
+  }*/
 
 
 /*

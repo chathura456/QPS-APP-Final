@@ -5,11 +5,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
 class UserProvider extends ChangeNotifier {
-  late UserModel _user;
+  UserModel? _user;
 
-  UserModel get user => _user;
+  UserModel? get user => _user;
 
-  setUser(UserModel user) {
+  set user(UserModel? user) {
     _user = user;
     notifyListeners();
   }

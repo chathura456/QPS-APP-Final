@@ -41,6 +41,8 @@ class _LoginStatusCheckState extends State<LoginStatusCheck> {
                 if (snapshot.hasData) {
                   UserModel loginUser=UserModel();
                   loginUser= UserModel.fromMap(snapshot.data);
+                  //Provider.of<UserProvider>(context, listen: false).user = loginUser;
+                  WidgetsBinding.instance.addPostFrameCallback((_) => setUserData(loginUser));
                   if(loginUser.type == 'Passenger'){
                     return HomePageNavigator(userData: loginUser,);
                   }
@@ -51,7 +53,7 @@ class _LoginStatusCheckState extends State<LoginStatusCheck> {
                 return const WelcomeScreen();
               },
               stream: FirebaseFirestore.instance.collection("Users").doc(
-                  snapshot.data?.uid).snapshots(),
+                  snapshot.data?.uid).snapshots(includeMetadataChanges: true),
             );
             //return const HomePageNavigator();
             //return const TestHomePage(userModel: ,);
@@ -66,6 +68,11 @@ class _LoginStatusCheckState extends State<LoginStatusCheck> {
         return const WelcomeScreen();
       },
       stream: FirebaseAuth.instance.authStateChanges(),);
+  }
+
+  void setUserData(UserModel user) {
+    Provider.of<UserProvider>(context, listen: false).user = user;
+    print('data added');
   }
 /*
   Future<UserModel> _fetchUserData(String uid) async {

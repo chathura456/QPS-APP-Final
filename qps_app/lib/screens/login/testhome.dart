@@ -36,7 +36,7 @@ class _TestHomePageState extends State<TestHomePage> {
       }).whenComplete(() {
         if(mounted){
           setState(() {
-            Provider.of<UserProvider>(context, listen: false).setUser(loginUser);
+            //Provider.of<UserProvider>(context, listen: false).setUser(loginUser);
           });
         }
       });

@@ -16,8 +16,8 @@ class SecondPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-              Text('Hello, ${userProvider.user.passenger?.amount}'),
-                Text('Hello, ${userProvider.user.name}'),
+              Text('Hello, ${userProvider.user?.passenger?.amount}'),
+                Text('Hello, ${userProvider.user?.name}'),
             ],),
           ),
         );

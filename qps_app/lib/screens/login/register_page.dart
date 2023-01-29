@@ -240,7 +240,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           );
           await db.collection("Users").doc(value.user?.uid).set(newUser.toMap()).then((value) {
             Fluttertoast.showToast(msg: 'User Registration Success!!');
-            navigatorKey.currentState!.popUntil((route) => route.isFirst);
+
           }).whenComplete(() async {
             const passenger = PassengerModel(
                 payment: 'no data',
@@ -265,11 +265,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       uid: newID
                   );
                   await userRef.update(currentUser.updateIdJason()
-                  );
+                  ).whenComplete(() {
+                    transaction.update(sfDocRef, {"latest": newID},);
+                    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+                  });
                 }on FirebaseException catch (e){
                   Fluttertoast.showToast(msg: '${e.message}');
                 }
-                transaction.update(sfDocRef, {"latest": newID},);
+
               });
             }on FirebaseException catch (e){
               Fluttertoast.showToast(msg: '${e.message}');
