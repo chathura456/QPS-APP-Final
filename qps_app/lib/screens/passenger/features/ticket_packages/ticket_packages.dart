@@ -24,6 +24,7 @@ class _QRScanner extends State<TicketPackages> {
       builder: (context, userProvider, child ){
         return Scaffold(
           appBar: commonAppBar('Ticket Packages ${userProvider.user.passenger?.amount}', context),
+         // appBar: commonAppBar('Ticket Packages ', context),
           body: SingleChildScrollView(
             child: SizedBox(
               width: MediaQuery.of(context).size.width,

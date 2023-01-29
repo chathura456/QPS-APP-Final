@@ -73,10 +73,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const Padding(
                         padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 40),
                         child: AppText(
                           text:
-                              'Please Sign up with new Account to continue with QPS App',
+                          'Please Sign up with new Account to continue with QPS App',
                           fontWeight: FontWeight.w500,
                           size: 15,
                         ),
@@ -117,7 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       return ("Please Enter your Email");
                                     }
                                     if (!RegExp(
-                                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                         .hasMatch(value)) {
                                       return ("please Enter a Valid Email");
                                     }
@@ -201,7 +201,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const LoginScreen()));
+                                              const LoginScreen()));
                                     }),
                               ],
                             ),
@@ -229,56 +229,56 @@ class _RegisterScreenState extends State<RegisterScreen> {
     try{
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text, password: passwordController.text).then((value) async {
+        try{
+          final db =  FirebaseFirestore.instance;
+          final newUser = UserModel(
+              email: value.user?.email,
+              name: nameController.text.trim(),
+              type: 'Passenger',
+              phone: phoneController.text.trim(),
+              points: '000'
+          );
+          await db.collection("Users").doc(value.user?.uid).set(newUser.toMap()).then((value) {
+            Fluttertoast.showToast(msg: 'User Registration Success!!');
+            navigatorKey.currentState!.popUntil((route) => route.isFirst);
+          }).whenComplete(() async {
+            const passenger = PassengerModel(
+                payment: 'no data',
+                amount: '1256',
+                date: 'no data',
+                description: 'no data'
+            );
+            //await db.collection('Payment_History').doc(value.user?.uid).set(passenger.toJason());
+            await db.collection("Users").doc(value.user?.uid).collection('Payment_History').doc(value.user?.uid).set(passenger.toJason());
+          }).whenComplete(() async {
             try{
-              final db =  FirebaseFirestore.instance;
-              final newUser = UserModel(
-                  email: value.user?.email,
-                  name: nameController.text.trim(),
-                  type: 'Passenger',
-                  phone: phoneController.text.trim(),
-                points: '000'
-              );
-              await db.collection("Users").doc(value.user?.uid).set(newUser.toMap()).then((value) {
-                Fluttertoast.showToast(msg: 'User Registration Success!!');
-                navigatorKey.currentState!.popUntil((route) => route.isFirst);
-              }).whenComplete(() async {
-                const passenger = PassengerModel(
-                  payment: 'no data',
-                  amount: '1256',
-                  date: 'no data',
-                  description: 'no data'
-                );
-                //await db.collection('Payment_History').doc(value.user?.uid).set(passenger.toJason());
-                await db.collection("Users").doc(value.user?.uid).collection('Payment_History').doc(value.user?.uid).set(passenger.toJason());
-              }).whenComplete(() async {
+              final sfDocRef = db.collection("Users").doc('counter');
+              await db.runTransaction((transaction) async {
+                final snapshot = await transaction.get(sfDocRef);
+                // Note: this could be done without a transaction
+                //       by updating the population using FieldValue.increment()
+                final lastID = snapshot.get("latest");
+                String newID = (int.parse(lastID)+1).toString();
                 try{
-                  final sfDocRef = db.collection("Users").doc('counter');
-                  await db.runTransaction((transaction) async {
-                    final snapshot = await transaction.get(sfDocRef);
-                    // Note: this could be done without a transaction
-                    //       by updating the population using FieldValue.increment()
-                    final lastID = snapshot.get("latest");
-                    String newID = (int.parse(lastID)+1).toString();
-                    try{
-                      final userRef= FirebaseFirestore.instance.collection("Users").doc(value.user?.uid);
-                      final currentUser = UserModel(
-                          uid: newID
-                      );
-                      await userRef.update(currentUser.updateIdJason()
-                      );
-                    }on FirebaseException catch (e){
-                      Fluttertoast.showToast(msg: '${e.message}');
-                    }
-                    transaction.update(sfDocRef, {"latest": newID},);
-                  });
+                  final userRef= FirebaseFirestore.instance.collection("Users").doc(value.user?.uid);
+                  final currentUser = UserModel(
+                      uid: newID
+                  );
+                  await userRef.update(currentUser.updateIdJason()
+                  );
                 }on FirebaseException catch (e){
                   Fluttertoast.showToast(msg: '${e.message}');
                 }
+                transaction.update(sfDocRef, {"latest": newID},);
               });
-
             }on FirebaseException catch (e){
               Fluttertoast.showToast(msg: '${e.message}');
             }
+          });
+
+        }on FirebaseException catch (e){
+          Fluttertoast.showToast(msg: '${e.message}');
+        }
       });
 
     }on FirebaseAuthException catch (e) {
@@ -292,7 +292,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
 
 
-    
+
     /*
     * try{
       await FirebaseAuth.instance.createUserWithEmailAndPassword(

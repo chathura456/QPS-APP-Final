@@ -29,16 +29,16 @@ class _TestHomePageState extends State<TestHomePage> {
       db.collection('Payment_History').doc(user!.uid).get().then((value1) => {
         loginUser.passenger = PassengerModel.fromMap(value1.data())
       });
-       if(mounted){
-         setState(() {
-           Provider.of<UserProvider>(context, listen: false).setUser(loginUser);
-         });
-       }
+      if(mounted){
+        setState(() {
+          Provider.of<UserProvider>(context, listen: false).setUser(loginUser);
+        });
+      }
 
     } );
 
 
-        }
+  }
 
   @override
   Widget build(BuildContext context) {

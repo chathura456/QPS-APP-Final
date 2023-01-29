@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:qps_app/widgets/my_widgets.dart';
 import 'package:qps_app/screens/screens.dart';
 
-
 class PaymentOptions extends StatefulWidget {
   const PaymentOptions({Key? key, required this.package}) : super(key: key);
   final String package;
@@ -58,11 +57,12 @@ class _PaymentOptionsState extends State<PaymentOptions> {
                 /*setState(() {
                   value = 0;
                 });*/
-                Navigator.pushReplacement(
+               /* Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                        const TicketPackages(balance: 100)));
+                        const TicketPackages(balance: 100)));*/
+                Navigator.pop(context);
               },
             ),
           ),
@@ -270,10 +270,16 @@ class _PaymentOptionsState extends State<PaymentOptions> {
                                          const SizedBox(width: 1),
                                          Expanded(
                                            child: RoundedButton2(press: (){
-
+                                             Navigator.pushReplacement<void, void>(
+                                               context,
+                                               MaterialPageRoute<void>(
+                                                 builder: (BuildContext context) => const PassengerHome(),
+                                               ),
+                                             );
+                                              /*
                                              setState(() {
                                                cardNo=cardNoController.text.trim();
-                                             });
+                                             });*/
                                            },text: 'Process',),
                                          ),
                                        ],
@@ -442,7 +448,7 @@ class _PaymentOptionsState extends State<PaymentOptions> {
                                     keyboardType: TextInputType.number,
                                     hintText: 'mCash Pin No',
                                     //isEnabled: _cardEnable,
-                                    controller: ezCashPinController),
+                                    controller: mCashPinController),
                                 const SizedBox(height: 20,),
                                 RoundedButton2(text: 'Confirm',press: (){},
                                   buttonColor: AppColors.kPrimaryColor60,),

@@ -35,7 +35,11 @@ class MyTextInputField extends StatefulWidget {
 }
 
 class _MyTextInputField extends State<MyTextInputField> {
-  late bool _passwordVisible = true;
+  bool _passwordVisible = true;
+  _MyTextInputField(){
+    _passwordVisible = true;
+  }
+  /*
   @override
   void initState() {
     super.initState();
@@ -52,7 +56,7 @@ class _MyTextInputField extends State<MyTextInputField> {
 
     }*/
     );*/
-  }
+  }*/
 /*
   var myText;
   void _updateText() {
@@ -60,6 +64,8 @@ class _MyTextInputField extends State<MyTextInputField> {
       myText = widget.controller?.text;
     });
   }*/
+
+
 
   @override
   void dispose() {

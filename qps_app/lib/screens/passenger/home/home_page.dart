@@ -17,7 +17,7 @@ class _PassengerHomeState extends State<PassengerHome>
 
   var currentPage = DrawerSections.home1;
   final GlobalKey<ScaffoldState> _key =
-      GlobalKey<ScaffoldState>(debugLabel: '_homescreenkey');
+  GlobalKey<ScaffoldState>(debugLabel: '_homescreenkey');
   final int balance = 100;
   User? user=FirebaseAuth.instance.currentUser;
   UserModel loginUser = UserModel();
@@ -28,20 +28,24 @@ class _PassengerHomeState extends State<PassengerHome>
     super.initState();
     var db = FirebaseFirestore.instance.collection("Users").doc(user!.uid);
     db.get().then((value) {
-        setState(() {
-          loginUser= UserModel.fromMap(value.data());
-        });
-
-      db.collection('Payment_History').doc(user!.uid).get().then((value1) => {
-        loginUser.passenger = PassengerModel.fromMap(value1.data())
+      setState(() {
+        loginUser= UserModel.fromMap(value.data());
       });
+    } ).whenComplete(() {
+      db.collection('Payment_History').doc(user!.uid).get().then((value1) => {
+      setState(() {
+      loginUser.passenger = PassengerModel.fromMap(value1.data());
+      })
+
+      });
+    }).whenComplete(() {
       if(mounted){
         setState(() {
           Provider.of<UserProvider>(context, listen: false).setUser(loginUser);
         });
       }
+    });
 
-    } );
 
 
   }
@@ -56,107 +60,107 @@ class _PassengerHomeState extends State<PassengerHome>
         child: SafeArea(
           //Appbar designs
           child: Scaffold(
-                key: _key,
-                appBar: AppBar(
-                  title: Text(
-                    '${loginUser.points} LKR',
-                  ),
-                  centerTitle: true,
-                  actions: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 5),
-                      child: IconButton(
-                        icon: const Icon(Icons.notifications_active),
-                        onPressed: (){
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => const PushNotifications()));
-                        },
-                      ),
-                    ),
-                  ],
-                  backgroundColor: AppColors.kPrimaryColor,
-                ),
-                drawer: Drawer(
-                  child: Column(
-                    children: [
-                      const DrawerHeader1(),
-                      navList(),
-                    ],
+            key: _key,
+            appBar: AppBar(
+              title: Text(
+                '${loginUser.points} LKR',
+              ),
+              centerTitle: true,
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 5),
+                  child: IconButton(
+                    icon: const Icon(Icons.notifications_active),
+                    onPressed: (){
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => const PushNotifications()));
+                    },
                   ),
                 ),
-                body: Container(
-                  color: AppColors.kPrimaryColor5,
-                  child: Column(
+              ],
+              backgroundColor: AppColors.kPrimaryColor,
+            ),
+            drawer: Drawer(
+              child: Column(
+                children: [
+                  const DrawerHeader1(),
+                  navList(),
+                ],
+              ),
+            ),
+            body: Container(
+              color: AppColors.kPrimaryColor5,
+              child: Column(
+                children: [
+                  Column(
                     children: [
-                      Column(
+                      ListView(
+                        shrinkWrap: true,
                         children: [
-                          ListView(
-                            shrinkWrap: true,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.zero,
-                                child: SizedBox(
-                                  //child: MySlider(),
-                                  height: MediaQuery.of(context).size.height * 0.25,
-                                  width: double.infinity,
-                                  child: const MySlider(),
-                                ),
-                              )
-                            ],
-                          ),
-                          //const SizedBox(height: 1,)
+                          Padding(
+                            padding: EdgeInsets.zero,
+                            child: SizedBox(
+                              //child: MySlider(),
+                              height: MediaQuery.of(context).size.height * 0.25,
+                              width: double.infinity,
+                              child: const MySlider(),
+                            ),
+                          )
                         ],
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: CustomScrollView(
-                          primary: false,
-                          slivers: [
-                            SliverPadding(
-                              padding: const EdgeInsets.fromLTRB(50, 15, 50, 40),
-                              sliver: SliverGrid.count(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 40,
-                                mainAxisSpacing: 20,
-                                children: [
-                                  const MyListTiles(
-                                      text: 'Edit\n Profile',
-                                      iconData: Icons.manage_accounts,
-                                      nextScreen: EditProfile()),
-                                  MyListTiles(
-                                      text: 'Ticket\n Packages',
-                                      iconData: Icons.confirmation_number,
-                                      nextScreen: TicketPackages(balance: balance,)),
-                                  const MyListTiles(
-                                      text: 'Bus\n Schedules',
-                                      iconData: Icons.event_note,
-                                      nextScreen: BusSchedules()),
-                                  const MyListTiles(
-                                      text: 'Live\n Tracker',
-                                      iconData: Icons.place,
-                                      nextScreen: LiveTracker()),
-                                  const MyListTiles(
-                                      text: 'Ads\n Section',
-                                      iconData: Icons.shop_2,
-                                      nextScreen: AdsSection()),
-                                  const MyListTiles(
-                                      text: 'Payment\n History',
-                                      iconData: Icons.history,
-                                      nextScreen: PaymentHistory()),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 40),
+                      //const SizedBox(height: 1,)
                     ],
                   ),
-                ),
+                  Expanded(
+                    flex: 1,
+                    child: CustomScrollView(
+                      primary: false,
+                      slivers: [
+                        SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(50, 15, 50, 40),
+                          sliver: SliverGrid.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 40,
+                            mainAxisSpacing: 20,
+                            children: [
+                              const MyListTiles(
+                                  text: 'Edit\n Profile',
+                                  iconData: Icons.manage_accounts,
+                                  nextScreen: EditProfile()),
+                              MyListTiles(
+                                  text: 'Ticket\n Packages',
+                                  iconData: Icons.confirmation_number,
+                                  nextScreen: TicketPackages(balance: balance,)),
+                              const MyListTiles(
+                                  text: 'Bus\n Schedules',
+                                  iconData: Icons.event_note,
+                                  nextScreen: BusSchedules()),
+                              const MyListTiles(
+                                  text: 'Live\n Tracker',
+                                  iconData: Icons.place,
+                                  nextScreen: LiveTracker()),
+                              const MyListTiles(
+                                  text: 'Ads\n Section',
+                                  iconData: Icons.shop_2,
+                                  nextScreen: AdsSection()),
+                              const MyListTiles(
+                                  text: 'Payment\n History',
+                                  iconData: Icons.history,
+                                  nextScreen: PaymentHistory()),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                ],
               ),
-
+            ),
           ),
+
         ),
+      ),
 
     );
   }
