@@ -22,35 +22,11 @@ class _SellerHomeState extends State<SellerHome> with AutomaticKeepAliveClientMi
   UserModel loginUser = UserModel();
   SellerModel seller = const SellerModel();
 
-  @override
-  void initState(){
-    super.initState();
-    var db = FirebaseFirestore.instance.collection("Users").doc(user!.uid);
-    db.get().then((value) {
-      if(mounted){
-        setState(() {
-          loginUser= UserModel.fromMap(value.data());
-        });
-      }
-      db.collection('Create_Ad').doc(user!.uid).get().then((value1) => {
-        if(mounted){
-          setState(() {
-            loginUser.sellerModel = SellerModel.fromMap(value1.data());
-          })
-        }
-
-      });
-    } ).whenComplete(() {
-      if(mounted){
-        setState(() {
-          Provider.of<UserProvider>(context, listen: false).setUser(loginUser);
-        });
-      }
-    });}
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final userNew = Provider.of<UserProvider>(context).user;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Container(
@@ -62,7 +38,7 @@ class _SellerHomeState extends State<SellerHome> with AutomaticKeepAliveClientMi
             appBar: AppBar(
               title: Text(
                 //'100 Views',
-                '${loginUser.type} LKR',
+                '${userNew?.points} LKR',
               ),
               centerTitle: true,
               actions: [

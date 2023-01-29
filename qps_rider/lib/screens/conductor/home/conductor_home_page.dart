@@ -22,34 +22,11 @@ class _ConductorHomeState extends State<ConductorHome>
   UserModel loginUser = UserModel();
   ConductorModel conductor = const ConductorModel();
 
-  @override
-  void initState(){
-    super.initState();
-    var db = FirebaseFirestore.instance.collection("Users").doc(user!.uid);
-    db.get().then((value) {
-      setState(() {
-        loginUser= UserModel.fromMap(value.data());
-      });
-
-      db.collection('Payment_History').doc(user!.uid).get().then((value1) => {
-        if(mounted){
-          setState(() {
-            loginUser.conductorModel = ConductorModel.fromMap(value1.data());
-          })
-        }
-
-      });
-      if(mounted){
-        setState(() {
-          Provider.of<UserProvider>(context, listen: false).setUser(loginUser);
-        });
-      }
-
-    } );}
 
   @override
   build(context) {
     super.build(context);
+    final userNew = Provider.of<UserProvider>(context).user;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Container(
@@ -61,7 +38,7 @@ class _ConductorHomeState extends State<ConductorHome>
             appBar: AppBar(
               title: Text(
                 //'${loginUser.points} LKR',
-                '${loginUser.conductorModel?.amount} LKR',
+                '${userNew?.points} LKR',
               ),
               centerTitle: true,
               actions: [

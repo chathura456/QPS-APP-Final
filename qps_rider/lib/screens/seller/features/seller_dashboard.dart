@@ -8,8 +8,7 @@ class SellerDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserProvider>(
-      builder: (context, userProvider, child ){
+    final userNew = Provider.of<UserProvider>(context).user;
         return Scaffold(
           appBar: commonAppBar('Seller Dashboard ', context),
           body: Center(
@@ -17,12 +16,10 @@ class SellerDashboard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children:  [
                   const Text('Under Development'),
-                  Text('${userProvider.user.sellerModel?.duration}')
+                  Text('${userNew?.name}')
                 ]),
           ),
         );
-      },
 
-    );
   }
 }

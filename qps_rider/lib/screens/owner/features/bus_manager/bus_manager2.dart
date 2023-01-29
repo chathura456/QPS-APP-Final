@@ -15,9 +15,9 @@ class BusManager2 extends StatelessWidget {
           body: Center(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children:  [
-                  const Text('Under Development'),
-                  Text('${userProvider.user.ownerModel?.income}')
+                children:  const [
+                  Text('Under Development'),
+                 // Text('${userProvider.user.ownerModel?.income}')
                 ]),
           ),
         );

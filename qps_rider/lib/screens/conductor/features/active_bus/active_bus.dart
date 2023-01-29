@@ -15,9 +15,9 @@ class ActiveBus extends StatelessWidget {
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-                children:  [
-              const Text('Under Development'),
-              Text('${userProvider.user.conductorModel?.amount}')
+                children:  const [
+              Text('Under Development'),
+              //Text('${userProvider.user.conductorModel?.amount}')
             ]),
           ),
         );

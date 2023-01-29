@@ -23,40 +23,11 @@ class _OwnerHomeState extends State<OwnerHome> with AutomaticKeepAliveClientMixi
   UserModel loginUser = UserModel();
   OwnerModel owner = const OwnerModel();
 
-  @override
-  void initState(){
-    super.initState();
-    var db = FirebaseFirestore.instance.collection("Users").doc(user!.uid);
-    db.get().then((value) {
-      setState(() {
-        loginUser= UserModel.fromMap(value.data());
-      });
-
-
-
-
-    } ).whenComplete(() {
-      db.collection('Bus_Details').doc(user!.uid).get().then((value1) => {
-        if(mounted){
-          setState(() {
-            loginUser.ownerModel = OwnerModel.fromMap(value1.data());
-          })
-        }
-
-      });
-
-    }).whenComplete(() {
-      if(mounted){
-        setState(() {
-          Provider.of<UserProvider>(context, listen: false).setUser(loginUser);
-        });
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final userNew = Provider.of<UserProvider>(context).user;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Container(
@@ -68,7 +39,7 @@ class _OwnerHomeState extends State<OwnerHome> with AutomaticKeepAliveClientMixi
             appBar: AppBar(
               title: Text(
                 //'1000 LKR',
-                '${loginUser.type} LKR',
+                '${userNew?.points} LKR',
               ),
               centerTitle: true,
               actions: [

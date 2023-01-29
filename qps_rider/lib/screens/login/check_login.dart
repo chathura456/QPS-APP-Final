@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '/widgets/colors.dart';
+import 'package:provider/provider.dart';
 
 class LoginStatusCheck extends StatefulWidget {
   const LoginStatusCheck({Key? key}) : super(key: key);
@@ -26,22 +27,14 @@ class _LoginStatusCheckState extends State<LoginStatusCheck> {
         }
         if (snapshot.connectionState == ConnectionState.active){
           if(snapshot.hasData){
-            /*UserModel loginUser=UserModel();
-            loginUser= UserModel.fromMap(snapshot.data);
-            if(loginUser.type == 'Conductor'){
-              return const TestHomePage();
-            }else if(loginUser.type == 'Owner'){
-              return const TestHomePage();
-            }else if(loginUser.type == 'Seller'){
-              return const TestHomePage();
-            }*/
-            //return const AccountSelect();
             return StreamBuilder(
               builder: (BuildContext context,
                   AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (snapshot.hasData) {
                   UserModel loginUser=UserModel();
                   loginUser= UserModel.fromMap(snapshot.data);
+                  WidgetsBinding.instance.addPostFrameCallback((_) => setUserData(loginUser));
+
                   if(loginUser.type == 'Conductor'){
                     return const HomePageNavigator(type: 'conductor');
                   }else if(loginUser.type == 'Owner'){
@@ -69,5 +62,10 @@ class _LoginStatusCheckState extends State<LoginStatusCheck> {
         return const WelcomeScreen();
       },
       stream: FirebaseAuth.instance.authStateChanges(),);
+  }
+
+  void setUserData(UserModel user) {
+    Provider.of<UserProvider>(context, listen: false).user = user;
+    print('data added');
   }
 }
