@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:qps_app/screens/screens.dart';
 import 'package:qps_app/widgets/my_widgets.dart';
@@ -29,6 +29,7 @@ class _QrDetailsState extends State<QrDetails> {
   bool timerOut = true;
   @override
   Widget build(BuildContext context) {
+    final userNew = Provider.of<UserProvider>(context).user;
     double customWith = MediaQuery.of(context).size.width;
     return Scaffold(
      /* appBar: AppBar(
@@ -130,9 +131,9 @@ class _QrDetailsState extends State<QrDetails> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
-                        '(Your Current Balance : Rs 465.00)',
+                        '(Your Current Balance : Rs ${userNew?.points}.00)',
                         style: TextStyle(
                           height: 0.9,
                             color: AppColors.kPrimaryColorLight, fontSize: 14),
@@ -191,7 +192,7 @@ class _QrDetailsState extends State<QrDetails> {
                           ),
                           onPressed: () {
                             stopTimer();
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PassengerHome(),));
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePageNavigator(),));
                           },
                           child: const Text(
                             'Continue',
@@ -291,7 +292,10 @@ class _QrDetailsState extends State<QrDetails> {
                  // fixedSize: const Size(100, 50), //////// HERE
                 ),
                 onPressed: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PassengerHome(),));
+                  //Navigator.popUntil(context, (route) => false);
+                  //Navigator.pop(context);
+
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePageNavigator(),));
                 },
                 child: const Text(
                   'OK',

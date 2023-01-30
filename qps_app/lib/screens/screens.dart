@@ -5,7 +5,6 @@ export 'login/forget_password.dart';
 export 'login/verify_otp.dart';
 export 'login/password_change.dart';
 export 'login/phone_no_change.dart';
-export 'login/selectAccountType.dart';
 export 'login/welcome_page.dart';
 export 'login/check_login.dart';
 

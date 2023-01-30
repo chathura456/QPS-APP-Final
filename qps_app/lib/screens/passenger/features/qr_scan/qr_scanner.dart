@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qps_app/screens/screens.dart';
 import 'package:lottie/lottie.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QRScanner extends StatefulWidget {
   const QRScanner({Key? key}) : super(key: key);
@@ -136,9 +139,13 @@ class _QRScanner extends State<QRScanner> {
         if(base!=0){
           conID = convertQR!~/base!;
           int value = (convertQR!%base!);
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) =>  QrDetails(conductorID:conID.toString(),qrData: value.toString(),getDate: currentDate,getTime: currentTime,)
-              ));
+          checkConductor(conID.toString(),value.toString(),currentDate,currentTime);
+         //updatePoints(value.toString());
+           /* Navigator.push(context,
+                MaterialPageRoute(builder: (context) =>  QrDetails(conductorID:conID.toString(),qrData: value.toString(),getDate: currentDate,getTime: currentTime,)
+                ));*/
+
+
         }else{
           dialogScreen();
         }
@@ -148,6 +155,82 @@ class _QRScanner extends State<QRScanner> {
       }
       controller!.dispose();
     }
+  }
+
+  Future checkConductor(String conID, String package, String currentDate, String currentTime) async {
+    final conductorQuery = FirebaseFirestore.instance.collection('Users').where('UserID', isEqualTo: conID);
+    final isValid = conductorQuery.parameters.isNotEmpty;
+    if(!isValid){
+      print('error!!!!!!!!!!!!!!!!!11');
+    }else{
+      try{
+        await conductorQuery.get().then((value) async {
+          //UserModel conductor=UserModel();
+
+          final validCheck = value.docs;
+          if(validCheck!= null && validCheck.isNotEmpty){
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) =>  QrDetails(conductorID:conID,qrData: package,getDate: currentDate,getTime: currentTime,)
+                ));
+
+            final conductorID = value.docs.first.id;
+            print(conductorID);
+            final conductorDB = FirebaseFirestore.instance.collection('Users').doc(conductorID);
+            await conductorDB.get().then((value) async {
+              UserModel conductor=UserModel();
+              conductor= UserModel.fromMap(value.data());
+              final currentBalance = conductor.points;
+              final newBalance = (int.parse(currentBalance!)+int.parse(package)).toString();
+              final updateData = UserModel(points:newBalance);
+              try{
+                await conductorDB.update(updateData.updatePoints()).then((value) {
+                  Fluttertoast.showToast(msg: 'Conductor Money Transfer Success');
+                });
+              }on FirebaseAuthException catch (e) {
+                dialogScreen();
+                Fluttertoast.showToast(msg: '${e.message}');
+              }
+
+            }).then((value1) async {
+              try{
+                final user = FirebaseAuth.instance.currentUser;
+                final db = FirebaseFirestore.instance.collection('Users').doc(user?.uid);
+                await db.get().then((value) async {
+                  UserModel loginUser=UserModel();
+                  loginUser= UserModel.fromMap(value.data());
+                  final currentBalance = loginUser.points;
+                  final newBalance = (int.parse(currentBalance!)-int.parse(package)).toString();
+                  final updateData = UserModel(points:newBalance);
+                  try{
+                    await db.update(updateData.updatePoints()).then((value) {
+                      Fluttertoast.showToast(msg: 'Purchase Success');
+                    });
+                  }on FirebaseAuthException catch (e) {
+                    Fluttertoast.showToast(msg: '${e.message}');
+                  }
+                });
+
+              }on FirebaseAuthException catch (e) {
+                Fluttertoast.showToast(msg: '${e.message}');
+              }
+            });
+
+            //conductor= UserModel.fromMap(value.docs.first);
+            print(conductorID);
+          }
+          else{
+            print('error!!!!!!!!!!!!!!!!!11');
+            //Fluttertoast.showToast(msg: 'Errorrrrrrrrrrrr');
+            dialogScreen();
+          }
+        });
+      }
+      on FirebaseAuthException catch (e) {
+        Fluttertoast.showToast(msg: '${e.message}');
+        print('errorrrrr');
+      }
+    }
+
   }
 
   void dialogScreen()=>showDialog(

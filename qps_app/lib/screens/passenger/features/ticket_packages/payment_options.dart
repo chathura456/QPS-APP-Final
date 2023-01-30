@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qps_app/widgets/my_widgets.dart';
 import 'package:qps_app/screens/screens.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PaymentOptions extends StatefulWidget {
   const PaymentOptions({Key? key, required this.package}) : super(key: key);
@@ -12,6 +15,7 @@ class PaymentOptions extends StatefulWidget {
 }
 
 class _PaymentOptionsState extends State<PaymentOptions> {
+  final GlobalKey<FormState> _paymentOptionFormKey = GlobalKey<FormState>(debugLabel: '_paymentScreenKey');
   var cardNoController = TextEditingController();
   var cardHolderController = TextEditingController();
   var cardDateController = TextEditingController();
@@ -24,6 +28,7 @@ class _PaymentOptionsState extends State<PaymentOptions> {
   bool saveCard = false;
   String cardNo='',holderName='';
   CardType cardType = CardType.Invalid;
+  bool loading = false;
 
   @override
   void initState() {
@@ -162,134 +167,164 @@ class _PaymentOptionsState extends State<PaymentOptions> {
                        Visibility(
                          visible: value==1,
                          maintainState: true,
-                         child: SizedBox(
-                           height: 390,
-                           child: Padding(
+                         child:  Padding(
                                padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 30),
-                               child: Column(
-                                   children: [
-                                     MyTextInputField(
-                                               keyboardType: TextInputType.number,
-                                               inputFormatters: [
-                                                 FilteringTextInputFormatter.digitsOnly,
-                                                 LengthLimitingTextInputFormatter(19),
-                                                 CardNumberInputFormatter(),
-                                               ],
-                                               icon: Icons.credit_card_sharp,
-                                               hintText: 'Enter Card Number',
-                                               suffixIcon: CardUtils.getCardIcon(cardType),
-                                               //isEnabled: _cardEnable,
-                                               controller: cardNoController),
-                                           const SizedBox(height: 25,),
-                                           MyTextInputField(
-                                               icon: Icons.person,
-                                               hintText: 'Enter Card Holder Name',
-                                               //isEnabled: _cardEnable,
-                                               controller: cardHolderController),
-                                     const SizedBox(height: 25,),
-                                     Row(
-                                       children: [
-                                         Expanded(
-                                           child: MyTextInputField(
-                                             icon: Icons.calendar_month,
-                                               keyboardType: TextInputType.number,
-                                               inputFormatters: [
-                                                 FilteringTextInputFormatter.digitsOnly,
-                                                 LengthLimitingTextInputFormatter(4),
-                                                 CardMonthInputFormatter(),
-                                               ],
-                                               hintText: 'MM/YY',
-                                               //isEnabled: _cardEnable,
-                                               controller: cardDateController),
-                                         ),
-                                         const SizedBox(width: 16),
-                                         Expanded(
-                                           child: MyTextInputField(
-                                               keyboardType: TextInputType.number,
-                                               icon: Icons.password,
-                                               inputFormatters: [
-                                                 FilteringTextInputFormatter.digitsOnly,
-                                                 LengthLimitingTextInputFormatter(4),
-                                               ],
-                                               hintText: 'CVV',
-                                               isPassword: true,
-                                               controller: cardCVVController),
-                                         ),
-                                       ],
-                                     ),
-                                     const SizedBox(height: 0,),
-                                     Row(
-                                       mainAxisAlignment: MainAxisAlignment.end,
-                                       children: [
-                                         Expanded(
-                                           child: Row(
-                                             mainAxisAlignment: MainAxisAlignment.end,
-                                             children: [
-                                               Text('Save Card',style: TextStyle(fontSize: 16,color: AppColors.kPrimaryColor60,fontWeight: FontWeight.bold),),
-                                               Switch(
-                                                 activeColor: AppColors.kPrimaryColor,
-                                                 inactiveThumbColor: AppColors.kPrimaryColor10,
-                                                 inactiveTrackColor: AppColors.kPrimaryColor10,
-                                                 value: saveCard,
-                                                 onChanged: (value)=>setState(() {
-                                                   if(saveCard==false) {
-                                                     saveCard=true;
-                                                   }else{
-                                                     saveCard=false;
+                               child: Form(
+                                 key: _paymentOptionFormKey,
+                                 child: Column(
+                                     children: [
+                                       MyTextInputField(
+                                           keyboardType: TextInputType.number,
+                                           autoValidateMode: AutovalidateMode.onUserInteraction,
+                                           validator: (value) {
+                                             if (value!.isEmpty) {
+                                               return ("Card Number Cannot be Empty");
+                                             }
+                                             return null;
+                                           },
+                                                 inputFormatters: [
+                                                   FilteringTextInputFormatter.digitsOnly,
+                                                   LengthLimitingTextInputFormatter(19),
+                                                   CardNumberInputFormatter(),
+                                                 ],
+                                                 icon: Icons.credit_card_sharp,
+                                                 hintText: 'Enter Card Number',
+                                                 suffixIcon: CardUtils.getCardIcon(cardType),
+                                                 //isEnabled: _cardEnable,
+                                                 controller: cardNoController),
+                                             const SizedBox(height: 25,),
+                                             MyTextInputField(
+                                                 autoValidateMode: AutovalidateMode.onUserInteraction,
+                                                 validator: (value) {
+                                                   if (value!.isEmpty) {
+                                                     return ("Card Holder Name Cannot be Empty");
                                                    }
-                                                 }),
-                                               ),
-                                             ],
-                                           )
-                                         ),/*
-                                         const Expanded(
-                                           child: Text('Save Card',style: TextStyle(fontSize: 16,color: AppColors.kPrimaryColor,fontWeight: FontWeight.bold),),
-                                         ),
-                                         const SizedBox(width: 1),
-                                         Expanded(
-                                           child: Switch(
-                                             value: saveCard,
-                                             onChanged: (value)=>setState(() {
-                                               saveCard=true;
-                                             }),
+                                                   return null;
+                                                 },
+                                                 icon: Icons.person,
+                                                 hintText: 'Enter Card Holder Name',
+                                                 //isEnabled: _cardEnable,
+                                                 controller: cardHolderController),
+                                       const SizedBox(height: 25,),
+                                       Row(
+                                         children: [
+                                           Expanded(
+                                             child: MyTextInputField(
+                                                 autoValidateMode: AutovalidateMode.onUserInteraction,
+                                                 validator: (value) {
+                                                   if (value!.isEmpty) {
+                                                     return ("Expire Date Cannot be Empty");
+                                                   }
+                                                   return null;
+                                                 },
+                                               icon: Icons.calendar_month,
+                                                 keyboardType: TextInputType.number,
+                                                 inputFormatters: [
+                                                   FilteringTextInputFormatter.digitsOnly,
+                                                   LengthLimitingTextInputFormatter(4),
+                                                   CardMonthInputFormatter(),
+                                                 ],
+                                                 hintText: 'MM/YY',
+                                                 //isEnabled: _cardEnable,
+                                                 controller: cardDateController),
                                            ),
-                                         ),*/
-                                       ],
-                                     ),
-                                     Row(
-                                       children: [
-                                         Expanded(
-                                           child: Column(
-                                             children: [
-                                               const SizedBox(height: 10,),
-                                               const Text('Total',style: TextStyle(fontSize: 14,color: AppColors.kPrimaryColor),),
-                                               Text('${widget.package} LKR',style: const TextStyle(fontSize: 26,color: AppColors.kPrimaryColor,fontWeight: FontWeight.w900),),
-                                             ],
+                                           const SizedBox(width: 16),
+                                           Expanded(
+                                             child: MyTextInputField(
+                                                 autoValidateMode: AutovalidateMode.onUserInteraction,
+                                                 validator: (value) {
+                                                   if (value!.isEmpty) {
+                                                     return ("CVV Cannot be Empty");
+                                                   }
+                                                   return null;
+                                                 },
+                                                 keyboardType: TextInputType.number,
+                                                 icon: Icons.password,
+                                                 inputFormatters: [
+                                                   FilteringTextInputFormatter.digitsOnly,
+                                                   LengthLimitingTextInputFormatter(4),
+                                                 ],
+                                                 hintText: 'CVV',
+                                                 isPassword: true,
+                                                 controller: cardCVVController),
                                            ),
-                                         ),
-                                         const SizedBox(width: 1),
-                                         Expanded(
-                                           child: RoundedButton2(press: (){
-                                             Navigator.pushReplacement<void, void>(
-                                               context,
-                                               MaterialPageRoute<void>(
-                                                 builder: (BuildContext context) => const PassengerHome(),
-                                               ),
-                                             );
-                                              /*
-                                             setState(() {
-                                               cardNo=cardNoController.text.trim();
-                                             });*/
-                                           },text: 'Process',),
-                                         ),
-                                       ],
-                                     ),
-                                   ],
-                                 ),
+                                         ],
+                                       ),
+                                       const SizedBox(height: 0,),
+                                       Row(
+                                         mainAxisAlignment: MainAxisAlignment.end,
+                                         children: [
+                                           Expanded(
+                                             child: Row(
+                                               mainAxisAlignment: MainAxisAlignment.end,
+                                               children: [
+                                                 Text('Save Card',style: TextStyle(fontSize: 16,color: AppColors.kPrimaryColor60,fontWeight: FontWeight.bold),),
+                                                 Switch(
+                                                   activeColor: AppColors.kPrimaryColor,
+                                                   inactiveThumbColor: AppColors.kPrimaryColor10,
+                                                   inactiveTrackColor: AppColors.kPrimaryColor10,
+                                                   value: saveCard,
+                                                   onChanged: (value)=>setState(() {
+                                                     if(saveCard==false) {
+                                                       saveCard=true;
+                                                     }else{
+                                                       saveCard=false;
+                                                     }
+                                                   }),
+                                                 ),
+                                               ],
+                                             )
+                                           ),/*
+                                           const Expanded(
+                                             child: Text('Save Card',style: TextStyle(fontSize: 16,color: AppColors.kPrimaryColor,fontWeight: FontWeight.bold),),
+                                           ),
+                                           const SizedBox(width: 1),
+                                           Expanded(
+                                             child: Switch(
+                                               value: saveCard,
+                                               onChanged: (value)=>setState(() {
+                                                 saveCard=true;
+                                               }),
+                                             ),
+                                           ),*/
+                                         ],
+                                       ),
+                                       Row(
+                                         children: [
+                                           Expanded(
+                                             child: Column(
+                                               children: [
+                                                 const SizedBox(height: 10,),
+                                                 const Text('Total',style: TextStyle(fontSize: 14,color: AppColors.kPrimaryColor),),
+                                                 Text('${widget.package} LKR',style: const TextStyle(fontSize: 26,color: AppColors.kPrimaryColor,fontWeight: FontWeight.w900),),
+                                               ],
+                                             ),
+                                           ),
+                                           const SizedBox(width: 1),
+                                           Expanded(
+                                             child: loading
+                                                 ? const Loading()
+                                                 :RoundedButton2(press: (){
+                                               paymentCheck(widget.package);
+
+                                               /*Navigator.pushReplacement<void, void>(
+                                                 context,
+                                                 MaterialPageRoute<void>(
+                                                   builder: (BuildContext context) => const PassengerHome(),
+                                                 ),
+                                               );*/
+                                                /*
+                                               setState(() {
+                                                 cardNo=cardNoController.text.trim();
+                                               });*/
+                                             },text: 'Process',),
+                                           ),
+                                         ],
+                                       ),
+                                     ],
+                                   ),
+                               ),
                              ),
-
-
-                         ),
                        ),
 
                       Row(
@@ -462,7 +497,7 @@ class _PaymentOptionsState extends State<PaymentOptions> {
                           ),
                         ),
                       ),
-                      Text('card No :$cardNo')
+                     // Text('card No :$cardNo')
                     ],
                   ),
                 ],
@@ -483,5 +518,52 @@ class _PaymentOptionsState extends State<PaymentOptions> {
         });
       }
     }
+  }
+
+  Future? paymentCheck(String package) async {
+    /*final isValid = _paymentOptionFormKey.currentState!.validate();
+    if (!isValid) {
+      return Fluttertoast.showToast(msg: 'check again you entered data!!');
+    }*/
+    setState(() {
+      loading = true;
+    });
+    try{
+      final user = FirebaseAuth.instance.currentUser;
+      final db = FirebaseFirestore.instance.collection('Users').doc(user?.uid);
+      await db.get().then((value) async {
+        UserModel loginUser=UserModel();
+        loginUser= UserModel.fromMap(value.data());
+        final currentBalance = loginUser.points;
+        final newBalance = (int.parse(currentBalance!)+int.parse(package)).toString();
+        final updateData = UserModel(points:newBalance);
+        try{
+          await db.update(updateData.updatePoints()).then((value) {
+            showDialog(context: context, builder: (context)=>MyDialogBox(
+              press: (){
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePageNavigator(),));
+              },
+              headerText: 'Purchase Success',
+              bodyText: 'Rs. $package added to your account.',
+            ));
+
+          });
+          /*setState(() {
+            loading = false;
+          });*/
+
+            //Fluttertoast.showToast(msg: 'Rs. $package added to your account');
+
+
+
+        }on FirebaseAuthException catch (e) {
+          Fluttertoast.showToast(msg: '${e.message}');
+        }
+      });
+
+    }on FirebaseAuthException catch (e) {
+        Fluttertoast.showToast(msg: '${e.message}');
+    }
+
   }
 }

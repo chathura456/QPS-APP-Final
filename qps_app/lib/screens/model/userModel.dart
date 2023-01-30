@@ -40,6 +40,9 @@ class UserModel {
   Map<String,dynamic>updateIdJason()=>{
     "UserID":uid,
   };
+  Map<String,dynamic>updatePoints()=>{
+    'Points': points,
+  };
 
   void updateUserData({String? uid,
   String? email,

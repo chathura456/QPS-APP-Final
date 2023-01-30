@@ -1,10 +1,17 @@
 import 'package:qps_app/widgets/my_widgets.dart';
 import 'package:flutter/material.dart';
 
-class MyDialogBox extends StatelessWidget {
-  const MyDialogBox({Key? key, required this.press}) : super(key: key);
+class MyDialogBox extends StatefulWidget {
+  const MyDialogBox({Key? key, required this.press, required this.headerText, required this.bodyText}) : super(key: key);
   final Function()? press;
+  final String headerText;
+  final String bodyText;
 
+  @override
+  State<MyDialogBox> createState() => _MyDialogBoxState();
+}
+
+class _MyDialogBoxState extends State<MyDialogBox> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -18,7 +25,8 @@ class MyDialogBox extends StatelessWidget {
   }
 
   _buildChild(BuildContext context) => Container(
-        height: 400,
+
+        height: 300,
         decoration:
             const BoxDecoration(color: Colors.white, shape: BoxShape.rectangle),
         child: Padding(
@@ -32,11 +40,11 @@ class MyDialogBox extends StatelessWidget {
                     height: 100,
                     width: 100,
                   )),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(15, 20, 15, 10),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 20, 15, 10),
                 child: Text(
-                  "Account type Selected as Passenger",
-                  style: TextStyle(
+                  widget.headerText,
+                  style: const TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
                       color: AppColors.kPrimaryColor),
@@ -46,12 +54,12 @@ class MyDialogBox extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
                 child: Text(
-                  "Note: You can never change the account type after pressing the confirmation button. If you want to change your account type now, you can click Cancel button.",
+                 widget.bodyText,
                   style:
-                      TextStyle(fontSize: 14, color: AppColors.kPrimaryColor),
+                      const TextStyle(fontSize: 14, color: AppColors.kPrimaryColor),
                   textAlign: TextAlign.justify,
                 ),
               ),
@@ -61,18 +69,18 @@ class MyDialogBox extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextButton(
+                  /*TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
                     style:
                         TextButton.styleFrom(primary: AppColors.kPrimaryColor),
                     child: const Text('Cancel'),
-                  ),
+                  ),*/
                   ElevatedButton(
-                      onPressed: press,
+                      onPressed: widget.press,
                       style: ElevatedButton.styleFrom(
-                          primary: AppColors.kPrimaryColor),
+                          backgroundColor: AppColors.kPrimaryColor),
                       child: const Text('Confirm')),
                 ],
               )

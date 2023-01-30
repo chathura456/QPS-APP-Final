@@ -14,7 +14,7 @@ class MyTextInputField extends StatefulWidget {
         this.icon,
         required this.controller,
         this.validator,
-        this.isPassword = false, this.isEnabled=false, this.inputFormatters, this.suffixIcon})
+        this.isPassword = false, this.isEnabled=false, this.inputFormatters, this.suffixIcon, this.autoValidateMode})
       : super(key: key);
   final String? hintText;
   final IconData? icon;
@@ -29,6 +29,7 @@ class MyTextInputField extends StatefulWidget {
   final bool isEnabled;
   final List<TextInputFormatter>? inputFormatters;
   final Widget? suffixIcon;
+  final AutovalidateMode? autoValidateMode;
 
   @override
   State<MyTextInputField> createState() => _MyTextInputField();
@@ -76,6 +77,7 @@ class _MyTextInputField extends State<MyTextInputField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autovalidateMode: widget.autoValidateMode,
       inputFormatters: widget.inputFormatters,
       autofocus: false,
       keyboardType: widget.keyboardType,
