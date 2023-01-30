@@ -19,9 +19,18 @@ class _LoginStatusCheckState extends State<LoginStatusCheck> {
     return StreamBuilder<User?>(
       builder: (context, snapshot){
         if(snapshot.connectionState ==ConnectionState.waiting){
-          return const Center(
-            child: CircularProgressIndicator(
-              color: AppColors.kPrimaryColor,
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator(
+                    color: AppColors.kPrimaryColor,
+                  ),
+                  Text('Waiting for Connection..', style: TextStyle(color: AppColors.kPrimaryColor,fontSize: 16,fontWeight: FontWeight.w500),)
+                ],
+              ),
             ),
           );
         }
@@ -46,7 +55,21 @@ class _LoginStatusCheckState extends State<LoginStatusCheck> {
                     return const AccountSelect();
                   }
                 }
-                return const AccountSelect();
+                return Scaffold(
+                  backgroundColor: Colors.white,
+                  body: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        CircularProgressIndicator(
+                          color: AppColors.kPrimaryColor,
+                        ),
+                        SizedBox(height: 20,),
+                        Text('Validating Data..', style: TextStyle(color: AppColors.kPrimaryColor,fontSize: 16,fontWeight: FontWeight.w500),)
+                      ],
+                    ),
+                  ),
+                );
               },
               stream: FirebaseFirestore.instance.collection("Users").doc(
                   snapshot.data?.uid).snapshots(),
@@ -58,6 +81,23 @@ class _LoginStatusCheckState extends State<LoginStatusCheck> {
           else{
             return const WelcomeScreen();
           }
+        }
+        if(snapshot.connectionState == ConnectionState.none){
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator(
+                    color: AppColors.kPrimaryColor,
+                  ),
+                  Text('No internet Connection..',
+                    style: TextStyle(color: AppColors.kPrimaryColor,fontSize: 16,fontWeight: FontWeight.w500),)
+                ],
+              ),
+            ),
+          );
         }
         return const WelcomeScreen();
       },

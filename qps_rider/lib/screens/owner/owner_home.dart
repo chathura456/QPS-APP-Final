@@ -59,7 +59,7 @@ class _OwnerHomeState extends State<OwnerHome> with AutomaticKeepAliveClientMixi
             drawer: Drawer(
               child: Column(
                 children: [
-                  const DrawerHeader1(),
+                  DrawerHeader1(userID: 'BO - ${userNew?.uid}',userName: '${userNew?.name}',),
                   navList(),
                 ],
               ),

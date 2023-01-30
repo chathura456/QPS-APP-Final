@@ -234,10 +234,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               email: value.user?.email,
               name: nameController.text.trim(),
               phone: phoneController.text.trim(),
-              points: '100'
+              points: '000'
           );
           await db.collection("Users").doc(value.user?.uid).set(newUser.toMap()).then((value) {
-            Fluttertoast.showToast(msg: 'User Registration Success!!');
+            //Fluttertoast.showToast(msg: 'User Registration Success!!');
             navigatorKey.currentState!.popUntil((route) => route.isFirst);
           }).whenComplete(() async {
             try{
@@ -263,7 +263,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             }on FirebaseException catch (e){
               Fluttertoast.showToast(msg: '${e.message}');
             }
-          });;
+          });
 
         }on FirebaseException catch (e){
           Fluttertoast.showToast(msg: '${e.message}');

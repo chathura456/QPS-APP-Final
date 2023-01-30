@@ -221,9 +221,27 @@ class _AccountSelect extends State<AccountSelect> {
       barrierDismissible: false,
       context: context,
       builder: (context) {
-        return const Center(
-          child: CircularProgressIndicator(),
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                CircularProgressIndicator(
+                  color: AppColors.kPrimaryColor,
+                ),
+                SizedBox(height: 20,),
+                Text('Validating Data..', style: TextStyle(color: AppColors.kPrimaryColor,fontSize: 16,fontWeight: FontWeight.w500),)
+              ],
+            ),
+          ),
         );
+        /*return const Center(
+          child: CircularProgressIndicator(
+            color: AppColors.kPrimaryColor,
+            backgroundColor: Colors.white,
+          ),
+        );*/
       },
     );
     try{
@@ -281,6 +299,7 @@ class _AccountSelect extends State<AccountSelect> {
     }on FirebaseException catch (e){
       Fluttertoast.showToast(msg: '${e.message}');
     }
+    Fluttertoast.showToast(msg: 'User Registration Success...');
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 }

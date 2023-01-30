@@ -11,8 +11,8 @@ import 'package:provider/provider.dart';
 
 
 class HomePageNavigator extends StatefulWidget {
-  const HomePageNavigator({Key? key, required this.userData}) : super(key: key);
-  final UserModel userData;
+  const HomePageNavigator({Key? key}) : super(key: key);
+  //final UserModel userData;
 
   @override
   State<HomePageNavigator> createState() => _HomePageNavigatorState();
@@ -55,8 +55,6 @@ class _HomePageNavigatorState extends State<HomePageNavigator> {
       });
     }
   }*/
-
-
 /*
   @override
   void initState(){

@@ -38,7 +38,7 @@ class _SellerHomeState extends State<SellerHome> with AutomaticKeepAliveClientMi
             appBar: AppBar(
               title: Text(
                 //'100 Views',
-                '${userNew?.points} LKR',
+                '${userNew?.points} Views',
               ),
               centerTitle: true,
               actions: [
@@ -58,7 +58,7 @@ class _SellerHomeState extends State<SellerHome> with AutomaticKeepAliveClientMi
             drawer: Drawer(
               child: Column(
                 children: [
-                  const DrawerHeader1(),
+                  DrawerHeader1(userID: 'S - ${userNew?.uid}',userName: '${userNew?.name}',),
                   navList(),
                 ],
               ),

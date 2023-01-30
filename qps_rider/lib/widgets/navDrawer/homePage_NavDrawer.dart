@@ -2,7 +2,9 @@ import '/widgets/my_widgets.dart';
 import 'package:flutter/material.dart';
 
 class DrawerHeader1 extends StatefulWidget {
-  const DrawerHeader1({Key? key}) : super(key: key);
+  const DrawerHeader1({Key? key, required this.userID, required this.userName}) : super(key: key);
+  final String userID;
+  final String userName;
 
   @override
   State<DrawerHeader1> createState() => _DrawerHeader1();
@@ -36,22 +38,22 @@ class _DrawerHeader1 extends State<DrawerHeader1> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children:  [
                 Text(
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
                     fontSize: 13,
                   ),
-                  "P-145875",
+                  widget.userID,
                   textAlign: TextAlign.start,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 3,
                 ),
                 Text(
-                  "John Doe",
-                  style: TextStyle(
+                  widget.userName,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 22,

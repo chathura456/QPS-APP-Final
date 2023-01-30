@@ -20,10 +20,8 @@ class _QRScanner extends State<TicketPackages> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserProvider>(
-      builder: (context, userProvider, child ){
         return Scaffold(
-          appBar: commonAppBar('Ticket Packages ${userProvider.user?.passenger?.amount}', context),
+          appBar: commonAppBar('Ticket Packages ', context),
          // appBar: commonAppBar('Ticket Packages ', context),
           body: SingleChildScrollView(
             child: SizedBox(
@@ -200,8 +198,6 @@ class _QRScanner extends State<TicketPackages> {
           ),
 
         );
-      },
 
-    );
   }
 }

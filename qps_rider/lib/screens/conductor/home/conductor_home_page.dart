@@ -58,7 +58,7 @@ class _ConductorHomeState extends State<ConductorHome>
             drawer: Drawer(
               child: Column(
                 children: [
-                  const DrawerHeader1(),
+                  DrawerHeader1(userID: 'C - ${userNew?.uid}',userName: '${userNew?.name}',),
                   navList(),
                 ],
               ),

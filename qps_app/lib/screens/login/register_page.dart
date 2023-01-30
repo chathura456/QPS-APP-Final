@@ -229,6 +229,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     try{
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text, password: passwordController.text).then((value) async {
+        print('firebase auth user created');
         try{
           final db =  FirebaseFirestore.instance;
           final newUser = UserModel(
@@ -240,6 +241,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           );
           await db.collection("Users").doc(value.user?.uid).set(newUser.toMap()).then((value) {
             Fluttertoast.showToast(msg: 'User Registration Success!!');
+            navigatorKey.currentState!.popUntil((route) => route.isFirst);
 
           }).whenComplete(() async {
             const passenger = PassengerModel(
@@ -250,11 +252,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
             );
             //await db.collection('Payment_History').doc(value.user?.uid).set(passenger.toJason());
             await db.collection("Users").doc(value.user?.uid).collection('Payment_History').doc(value.user?.uid).set(passenger.toJason());
+            print('payment history added');
+
           }).whenComplete(() async {
             try{
               final sfDocRef = db.collection("Users").doc('counter');
               await db.runTransaction((transaction) async {
                 final snapshot = await transaction.get(sfDocRef);
+                print('get latest id');
                 // Note: this could be done without a transaction
                 //       by updating the population using FieldValue.increment()
                 final lastID = snapshot.get("latest");
@@ -264,28 +269,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   final currentUser = UserModel(
                       uid: newID
                   );
-                  await userRef.update(currentUser.updateIdJason()
+                  await userRef.update(currentUser.updateIdJason(),
                   ).whenComplete(() {
+                    print('user id added');
                     transaction.update(sfDocRef, {"latest": newID},);
-                    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+                    print('latest id updated');
+
                   });
                 }on FirebaseException catch (e){
                   Fluttertoast.showToast(msg: '${e.message}');
+                  print('${e.message}');
                 }
 
               });
             }on FirebaseException catch (e){
               Fluttertoast.showToast(msg: '${e.message}');
+              print('${e.message}');
             }
           });
 
         }on FirebaseException catch (e){
           Fluttertoast.showToast(msg: '${e.message}');
+          print('${e.message}');
         }
       });
 
     }on FirebaseAuthException catch (e) {
       Fluttertoast.showToast(msg: '${e.message}');
+      print('${e.message}');
 
     }
     if(mounted){

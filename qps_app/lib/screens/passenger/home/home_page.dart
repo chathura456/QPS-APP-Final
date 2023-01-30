@@ -23,7 +23,7 @@ class _PassengerHomeState extends State<PassengerHome>
   User? user=FirebaseAuth.instance.currentUser;
   UserModel loginData = UserModel();
   PassengerModel passenger = const PassengerModel();
-
+/*
   @override
   void initState() {
     // TODO: implement initState
@@ -36,7 +36,7 @@ class _PassengerHomeState extends State<PassengerHome>
       });
     });
 
-  }
+  }*/
 /*
   @override
   void didChangeDependencies() {
