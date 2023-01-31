@@ -1,3 +1,5 @@
+import 'package:qps_rider/main.dart';
+
 import '/screens/screens.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +16,8 @@ class RouteGenerator{
         return MaterialPageRoute(builder: (_)=>const RegisterScreen());
       case '/home':
         return MaterialPageRoute(builder: (_)=>const TestHomePage());
+      case '/splash':
+        return MaterialPageRoute(builder: (_)=>const SplashScreen());
     /*case '/welcome':
         return MaterialPageRoute(builder: (_)=>const WelcomePage());*/
       default:

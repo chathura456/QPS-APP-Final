@@ -18,3 +18,4 @@ export 'slider/slider.dart';
 export 'routes/tab_navigator.dart';
 export 'routes/homepage_navigation.dart';
 export 'package:qps_rider/widgets/inputFields/latest_input_field.dart';
+export 'dialog/dialogBox2.dart';

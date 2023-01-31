@@ -4,6 +4,7 @@ import '../../screens.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PassengerHome extends StatefulWidget {
   const PassengerHome({Key? key}) : super(key: key);
@@ -261,10 +262,20 @@ class _PassengerHomeState extends State<PassengerHome>
                 MaterialPageRoute(builder: (context) => const AboutUs()));
             break;
           case 7:
-            logout(context);
+            /*logout(context);
             //Navigator.push(context, MaterialPageRoute(builder: (context) =>  LoginScreen()));
-            /*Navigator.of(context, rootNavigator: true).pushReplacement(
-                MaterialPageRoute(builder: (context) => const LoginScreen()));*/
+            Navigator.of(context, rootNavigator: true).pushReplacement(
+                MaterialPageRoute(builder: (context) => const WelcomeScreen()));*/
+            showDialog(context: context, builder: (context)=>MyDialogBox2(
+              press: (){
+                logout(context);
+                Navigator.of(context, rootNavigator: true).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const WelcomeScreen()));
+               // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePageNavigator(),));
+              },
+              headerText: 'Logout..',
+              bodyText: 'Are you sure want to the logout from this application ?',
+            ));
 
             break;
         }
@@ -299,6 +310,9 @@ class _PassengerHomeState extends State<PassengerHome>
 
   Future<void> logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
+    Fluttertoast.showToast(msg: 'Logout Success...');
+
+
     /*Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context)=> LoginScreen())
     );*/

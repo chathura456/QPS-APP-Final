@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         //home: const SplshScreen(),
         navigatorKey: navigatorKey,
         //home: const SelectLogin(),
-        initialRoute: '/',
+        initialRoute: '/splash',
         onGenerateRoute: RouteGenerator.generateRoute,
       ),
     );
@@ -65,11 +65,11 @@ class SplshScreen extends StatelessWidget {
         ),
       ),
       backgroundColor: AppColors.kPrimaryColor,
-      nextScreen: const WelcomeScreen(),
+      nextScreen: const LoginStatusCheck(),
       splashIconSize: 150,
       duration: 3000,
-      splashTransition: SplashTransition.fadeTransition,
-      pageTransitionType: PageTransitionType.fade,
+      splashTransition: SplashTransition.scaleTransition,
+      pageTransitionType: PageTransitionType.theme,
     );
   }
 }

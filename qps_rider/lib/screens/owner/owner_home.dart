@@ -7,6 +7,7 @@ import '../screens.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class OwnerHome extends StatefulWidget {
   const OwnerHome({Key? key}) : super(key: key);
@@ -205,7 +206,16 @@ class _OwnerHomeState extends State<OwnerHome> with AutomaticKeepAliveClientMixi
             //Navigator.push(context, MaterialPageRoute(builder: (context) =>  LoginScreen()));
            /* Navigator.of(context, rootNavigator: true).pushReplacement(
                 MaterialPageRoute(builder: (context) => const LoginScreen()));*/
-          logout(context);
+            showDialog(context: context, builder: (context)=>MyDialogBox2(
+              press: (){
+                logout(context);
+                Navigator.of(context, rootNavigator: true).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const WelcomeScreen()));
+                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePageNavigator(),));
+              },
+              headerText: 'Logout..',
+              bodyText: 'Are you sure want to the logout from this application ?',
+            ));
 
             break;
         }
@@ -240,6 +250,7 @@ class _OwnerHomeState extends State<OwnerHome> with AutomaticKeepAliveClientMixi
 
   Future<void> logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
+    Fluttertoast.showToast(msg: 'Logout Success...');
   }
 
   @override

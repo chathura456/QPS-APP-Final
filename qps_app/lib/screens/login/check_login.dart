@@ -17,11 +17,7 @@ class LoginStatusCheck extends StatefulWidget {
 class _LoginStatusCheckState extends State<LoginStatusCheck> {
   UserModel loginUser = UserModel();
   User? user=FirebaseAuth.instance.currentUser;
-
-
-
-
-
+  
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(

@@ -28,7 +28,9 @@ class _MyDialogBoxState extends State<MyDialogBox> {
 
         height: 300,
         decoration:
-            const BoxDecoration(color: Colors.white, shape: BoxShape.rectangle),
+            BoxDecoration(color: Colors.white, shape: BoxShape.rectangle
+            ,borderRadius: BorderRadius.circular(20)
+            ),
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
@@ -89,3 +91,5 @@ class _MyDialogBoxState extends State<MyDialogBox> {
         ),
       );
 }
+
+

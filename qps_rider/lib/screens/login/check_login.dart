@@ -51,7 +51,9 @@ class _LoginStatusCheckState extends State<LoginStatusCheck> {
                   }else if(loginUser.type == 'Seller'){
                     return const HomePageNavigator(type: 'seller');
                   }
-                  else {
+                  else if(loginUser.type == 'Passenger'){
+                    return const WelcomeScreen();
+                  } else if(loginUser.type == null){
                     return const AccountSelect();
                   }
                 }
