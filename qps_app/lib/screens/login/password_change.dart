@@ -44,7 +44,7 @@ class _ChangePasswordScreen extends State<ChangePasswordScreen> {
                             decoration: TextDecoration.underline,
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xff80065d)),
+                            color: AppColors.kPrimaryColor),
                       ),
                     ),
                     const SizedBox(

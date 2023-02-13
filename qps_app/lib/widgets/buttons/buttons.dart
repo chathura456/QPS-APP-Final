@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qps_app/widgets/colors.dart';
 
 class RoundedButton extends StatelessWidget {
   const RoundedButton(
@@ -25,7 +26,7 @@ class RoundedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: press,
       style: ElevatedButton.styleFrom(
-          primary: const Color(0xff80065d),
+          primary: AppColors.kPrimaryColor,
           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 17),
           textStyle: TextStyle(
             letterSpacing: 2,

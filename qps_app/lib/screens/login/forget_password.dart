@@ -43,7 +43,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             decoration: TextDecoration.underline,
                             fontSize: 35,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xff80065d)),
+                            color: AppColors.kPrimaryColor),
                       ),
                     ),
                     const Padding(

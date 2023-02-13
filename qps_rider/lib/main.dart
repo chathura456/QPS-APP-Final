@@ -63,14 +63,14 @@ class SplashScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset('asset/logo/logo2.png', width: 150, height: 150),
+            Image.asset('asset/logo/logo2.png', width: 200, height: 200),
           ],
         ),
       ),
       backgroundColor: AppColors.kPrimaryColor,
       nextScreen: const LoginStatusCheck(),
 
-      splashIconSize: 150,
+      splashIconSize: 200,
       duration: 3000,
       splashTransition: SplashTransition.scaleTransition,
       pageTransitionType: PageTransitionType.theme,

@@ -16,15 +16,15 @@ class _MySliderState extends State<MySlider> {
       indicatorBgPadding: 5,
       images: [
         Image.asset(
+          'asset/slider/3.jpg',
+          fit: BoxFit.cover,
+        ),
+        Image.asset(
           'asset/slider/1.jpg',
           fit: BoxFit.cover,
         ),
         Image.asset(
-          'asset/slider/2.png',
-          fit: BoxFit.cover,
-        ),
-        Image.asset(
-          'asset/slider/3.jpg',
+          'asset/slider/5.jpg',
           fit: BoxFit.cover,
         ),
         Image.asset(
@@ -32,7 +32,7 @@ class _MySliderState extends State<MySlider> {
           fit: BoxFit.cover,
         ),
         Image.asset(
-          'asset/slider/5.jpg',
+          'asset/slider/2.png',
           fit: BoxFit.cover,
         ),
       ],

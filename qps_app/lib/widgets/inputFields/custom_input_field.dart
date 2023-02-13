@@ -88,7 +88,7 @@ class _MyInputField1State extends State<MyInputField> {
           icon: Icon(
             // Based on passwordVisible state choose the icon
             _passwordVisible ? Icons.visibility : Icons.visibility_off,
-            color: const Color(0xff80065d),
+            color: AppColors.kPrimaryColor,
           ),
           onPressed: () {
             // Update the state i.e. toogle the state of passwordVisible variable
@@ -100,7 +100,7 @@ class _MyInputField1State extends State<MyInputField> {
             : null,
         prefixIcon: widget.icon!=null?Icon(
           widget.icon,
-          color: const Color(0xff80065d),
+          color: AppColors.kPrimaryColor,
         ):null,
         hintText: widget.hintText,
         hintStyle: TextStyle(

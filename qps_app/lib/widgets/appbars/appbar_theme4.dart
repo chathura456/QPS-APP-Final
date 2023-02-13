@@ -21,7 +21,7 @@ class AppBar4 extends StatelessWidget {
         child: Container(
           height: MediaQuery.of(context).size.height * height1,
           width: MediaQuery.of(context).size.width,
-          color: const Color(0xff80065d),
+          color: AppColors.kPrimaryColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

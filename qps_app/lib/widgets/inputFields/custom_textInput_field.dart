@@ -99,7 +99,7 @@ class _MyTextInputField extends State<MyTextInputField> {
         suffixIcon: widget.suffixIcon,
         prefixIcon: widget.icon!=null?Icon(
           widget.icon,
-          color: const Color(0xff80065d),
+          color: AppColors.kPrimaryColor,
         ):null,
         hintText: widget.hintText,
         hintStyle: TextStyle(

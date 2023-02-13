@@ -521,10 +521,10 @@ class _PaymentOptionsState extends State<PaymentOptions> {
   }
 
   Future? paymentCheck(String package) async {
-    /*final isValid = _paymentOptionFormKey.currentState!.validate();
+    final isValid = _paymentOptionFormKey.currentState!.validate();
     if (!isValid) {
       return Fluttertoast.showToast(msg: 'check again you entered data!!');
-    }*/
+    }
     setState(() {
       loading = true;
     });

@@ -68,7 +68,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               decoration: TextDecoration.underline,
                               fontSize: 40,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xff80065d)),
+                              color: AppColors.kPrimaryColor),
                         ),
                       ),
                       const Padding(

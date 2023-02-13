@@ -42,7 +42,7 @@ class _ChangePhoneNo extends State<ChangePhoneNo> {
                             decoration: TextDecoration.underline,
                             fontSize: 36,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xff80065d)),
+                            color: AppColors.kPrimaryColor),
                       ),
                     ),
                     const Padding(

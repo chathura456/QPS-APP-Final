@@ -39,7 +39,7 @@ class WelcomeScreen extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
+                    children:  const [
                       SizedBox(
                         // <-- use a sized box and change the height
                         height: 130.0,
@@ -59,13 +59,33 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                       SizedBox(
                         // <-- use a sized box and change the height
+                        height: 40.0,
+                        child: ListTile(
+                          title: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 0,horizontal: 60),
+                            child: Text(
+                              'CONNECT',
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 38,
+                                fontFamily: 'Forte',
+                                color: AppColors.kPrimaryColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20,),
+                      SizedBox(
+                        // <-- use a sized box and change the height
                         height: 25.0,
                         child: ListTile(
                           title: Center(
                             child: Text(
-                              'Make your journey easy...',
+                              'Where bus management meets technology...',
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 14,
                                 fontFamily: 'Lucidia',
                                 color: AppColors.kPrimaryColor,
                                 fontWeight: FontWeight.w600,

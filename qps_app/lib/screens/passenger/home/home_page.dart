@@ -88,7 +88,7 @@ class _PassengerHomeState extends State<PassengerHome>
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Container(
-        color: AppColors.kPrimaryColorDark,
+        color: AppColors.kPrimaryColor,
         child: SafeArea(
           //Appbar designs
           child: Scaffold(
