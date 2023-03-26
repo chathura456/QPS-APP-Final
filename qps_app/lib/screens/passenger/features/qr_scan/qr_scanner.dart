@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'package:intl/intl.dart';
-import 'package:qps_app/screens/passenger/features/qr_scan/qr_details.dart';
+import 'package:provider/provider.dart';
 import 'package:qps_app/widgets/my_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qps_app/screens/screens.dart';
 import 'package:lottie/lottie.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import "package:firebase_auth/firebase_auth.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QRScanner extends StatefulWidget {
@@ -47,6 +47,7 @@ class _QRScanner extends State<QRScanner> {
   Widget build(BuildContext context) {
   currentDate = DateFormat('EEE, d MMM y').format(now);
   currentTime = DateFormat.jm().format(DateTime.now());
+  final passenger = Provider.of<UserProvider>(context).user;
 
     if (controller != null && mounted ) {
       controller!.pauseCamera();
@@ -147,11 +148,11 @@ class _QRScanner extends State<QRScanner> {
 
 
         }else{
-          dialogScreen();
+          dialogScreen('You Scanned the Wrong QR Code. Please scan a QR code from verified QPS Conductor.');
         }
 
       }else{
-        dialogScreen();
+        dialogScreen('You Scanned the Wrong QR Code. Please scan a QR code from verified QPS Conductor.');
       }
       controller!.dispose();
     }
@@ -168,10 +169,10 @@ class _QRScanner extends State<QRScanner> {
           //UserModel conductor=UserModel();
 
           final validCheck = value.docs;
-          if(validCheck!= null && validCheck.isNotEmpty){
-            Navigator.push(context,
+          if(validCheck.isNotEmpty){
+          /*  Navigator.push(context,
                 MaterialPageRoute(builder: (context) =>  QrDetails(conductorID:conID,qrData: package,getDate: currentDate,getTime: currentTime,)
-                ));
+                ));*/
 
             final conductorID = value.docs.first.id;
             print(conductorID);
@@ -182,14 +183,14 @@ class _QRScanner extends State<QRScanner> {
               final currentBalance = conductor.points;
               final newBalance = (int.parse(currentBalance!)+int.parse(package)).toString();
               final updateData = UserModel(points:newBalance);
-              try{
+             /* try{
                 await conductorDB.update(updateData.updatePoints()).then((value) {
                   Fluttertoast.showToast(msg: 'Conductor Money Transfer Success');
                 });
               }on FirebaseAuthException catch (e) {
                 dialogScreen();
                 Fluttertoast.showToast(msg: '${e.message}');
-              }
+              }*/
 
             }).then((value1) async {
               try{
@@ -199,15 +200,34 @@ class _QRScanner extends State<QRScanner> {
                   UserModel loginUser=UserModel();
                   loginUser= UserModel.fromMap(value.data());
                   final currentBalance = loginUser.points;
-                  final newBalance = (int.parse(currentBalance!)-int.parse(package)).toString();
-                  final updateData = UserModel(points:newBalance);
-                  try{
-                    await db.update(updateData.updatePoints()).then((value) {
-                      Fluttertoast.showToast(msg: 'Purchase Success');
-                    });
-                  }on FirebaseAuthException catch (e) {
-                    Fluttertoast.showToast(msg: '${e.message}');
+                  if(int.parse(currentBalance!)>=int.parse(package)){
+                    final newBalance = (int.parse(currentBalance!)-int.parse(package)).toString();
+                    final updateData = UserModel(points:newBalance);
+
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) =>  QrDetails(conductorID:conID,qrData: package,getDate: currentDate,getTime: currentTime,)
+                        ));
+
+                    try{
+                      await conductorDB.update(updateData.updatePoints()).then((value) {
+                        Fluttertoast.showToast(msg: 'Conductor Money Transfer Success');
+                      });
+                    }on FirebaseAuthException catch (e) {
+                      dialogScreen('You Scanned the Wrong QR Code. Please scan a QR code from verified QPS Conductor.');
+                      Fluttertoast.showToast(msg: '${e.message}');
+                    }
+
+                    try{
+                      await db.update(updateData.updatePoints()).then((value) {
+                        Fluttertoast.showToast(msg: 'Purchase Success');
+                      });
+                    }on FirebaseAuthException catch (e) {
+                      Fluttertoast.showToast(msg: '${e.message}');
+                    }
+                  }else{
+                    dialogScreen('Ticket amount is Rs.$package.00. You have not enough balance to pay for the ticket(you current balance is $currentBalance)');
                   }
+
                 });
 
               }on FirebaseAuthException catch (e) {
@@ -221,7 +241,7 @@ class _QRScanner extends State<QRScanner> {
           else{
             print('error!!!!!!!!!!!!!!!!!11');
             //Fluttertoast.showToast(msg: 'Errorrrrrrrrrrrr');
-            dialogScreen();
+            dialogScreen('You Scanned the Wrong QR Code. Please scan a QR code from verified QPS Conductor.');
           }
         });
       }
@@ -233,7 +253,7 @@ class _QRScanner extends State<QRScanner> {
 
   }
 
-  void dialogScreen()=>showDialog(
+  void dialogScreen(String msg)=>showDialog(
     context: context,
     builder: (context)=>Dialog(
       child: Padding(
@@ -243,9 +263,9 @@ class _QRScanner extends State<QRScanner> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Lottie.asset('asset/animations/cancel.json',height: 200),
-            const Text('You Scanned the Wrong QR Code. Please scan a QR code from verified QPS Conductor.',
+            Text(msg,
               textAlign: TextAlign.justify,
-              style: TextStyle(color: AppColors.kPrimaryColor),),
+              style: const TextStyle(color: AppColors.kPrimaryColor),),
             const SizedBox(height: 10,),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
